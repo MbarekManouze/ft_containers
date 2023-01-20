@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/19 18:31:04 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:34:30 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		size_type 		capacity() const { return (_capacity); }
 		bool 			empty() const { return (_size == 0 ? true : false); }
 		
+
+		// RESIZE METHOD DONE AND WELL TESTED //
+
 		void 			resize (size_type n)
 		{
-			//std::cout << "alright "<< std::endl;
 			if (_size == 0){
 				_data = allocater.allocate(n);
 				for (size_t i = 0; i < n ; i++)
@@ -65,10 +67,15 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			else{
 				if (n > this->size()){
 					size_t new_capacity;
-					if (n > _capacity * 2)
-						new_capacity = n;
 					if (n > _capacity)
-						new_capacity = _capacity * 2;
+					{
+						if (n > _capacity * 2)
+							new_capacity = n;
+						else
+							new_capacity = _capacity * 2;
+					}
+					else
+						new_capacity = n;
 					pointer _new_data = allocater.allocate(new_capacity);
 					for (size_t i = 0; i < this->size() ; i++)
 						allocater.construct(_new_data + i, _data[i]);
@@ -82,7 +89,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 					_size = n;
 				}
 				else if (n < _size){
-					//std::cout << "ok" << std::endl;
 					pointer _new_data = allocater.allocate(n);
 					for (size_t i = 0; i < n; i++)
 						allocater.construct(_new_data + i, _data[i]);
@@ -96,6 +102,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 				}
 			}
 		}
+
 		void resize (size_type n, const T& value){
 			if (n > this->size()){
 				size_t new_capacity;
@@ -118,7 +125,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 				_size = n;
 			}
 			else{
-				//std::cout << "ok" << std::endl;
 				pointer new_data = allocater.allocate(_capacity);
 				for (size_t i = 0; i < n ;i++)
 					allocater.construct(new_data + i, _data[i]);
@@ -130,6 +136,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			}
 		}
 
+		/////////////////////////////////
 		
 		void push_back(const value_type& value){
 
