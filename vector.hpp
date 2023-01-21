@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/21 18:03:53 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/21 23:48:52 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,12 +223,12 @@ template < class T, class Alloc = std::allocator<T> > class vector
 				_capacity *= 2;
 			new_data = allocater.allocate(_capacity);
 			_size++;
-			for (size_t i = 0; i < _size ; i++){
-				if (*position == _data[i]){
+			for (size_t i = 0; i < _size; i++){
+				if (&position == _data + i){
 					tmp = i;
 					allocater.construct(new_data + i, val);
 					i++;
-					while (tmp < _size){
+					while (tmp < _size && i < _size){
 						allocater.construct(new_data + i, _data[tmp]);
 						tmp++;
 						i++;
@@ -238,11 +238,42 @@ template < class T, class Alloc = std::allocator<T> > class vector
 					allocater.deallocate(_data, _capacity);
 					_data = new_data;
 					return (position);
-				}
+				}				
 				allocater.construct(new_data + i, _data[i]);
 			}
 			return (position);
 		}
+
+		void insert (iterator position, size_type n, const value_type& val){
+			size_t 	tmp;
+			pointer new_data;
+			if (_size == _capacity)
+				_capacity *= 2;
+			new_data = allocater.allocate(_capacity);
+			_size += n;
+			for (size_t i = 0; i < _size; i++){
+				if (&position == _data + i){
+					tmp = i;
+					while (n > 0)
+					{
+						allocater.construct(new_data + i, val);
+						n--;
+					}
+					i++;
+					while (tmp < _size && i < _size){
+						allocater.construct(new_data + i, _data[tmp]);
+						tmp++;
+						i++;
+					}
+					for (size_t i = 0; i < _capacity; i++)
+						allocater.destroy(_data + i);
+					allocater.deallocate(_data, _capacity);
+					_data = new_data;
+				}				
+				allocater.construct(new_data + i, _data[i]);
+			}
+		}
+
 
 	private :
 		T				*_data;

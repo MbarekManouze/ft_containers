@@ -131,19 +131,68 @@ void ft_get_allocator()
   pointer = vec.get_allocator().allocate(5);
 
 
-  for(l = 0; i < 5; i++)
-    vec.get_allocator().construct(&pointer[i], i);
+  for(l = 0; l < 5; l++)
+    vec.get_allocator().construct(&pointer[l], l);
 
   std::cout << "The allocated array contains:";
-  for (i=0; i<5; i++)
-    std::cout << ' ' << pointer[i];
+  for (l=0; l<5; l++)
+    std::cout << ' ' << pointer[l];
   std::cout << '\n';
 
-  for (i=0; i<5; i++)
-    myvector.get_allocator().destroy(&pointer[i]);
-  myvector.get_allocator().deallocate(pointer,5);
+  for (l=0; l<5; l++)
+    vec.get_allocator().destroy(&pointer[l]);
+  vec.get_allocator().deallocate(pointer,5);
 
 
+}
+
+void ft_insert()
+{
+  std::vector<int> myvector (3,100);
+  std::vector<int>::iterator it;
+
+  it = myvector.begin();
+  it = myvector.insert ( it , 200 );
+
+  myvector.insert (it,2,300);
+
+  // "it" no longer valid, get a new one:
+  it = myvector.begin();
+
+  std::vector<int> anothervector (2,400);
+  myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+  int myarray [] = { 501,502,503 };
+  myvector.insert (myvector.begin(), myarray, myarray+3);
+
+  std::cout << "myvector contains:";
+  for (it=myvector.begin(); it<myvector.end(); it++)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+
+  std::cout << "***************************\n";
+
+  vector<int> vec (3,100);
+  vector<int>::iterator it;
+
+  it = vec.begin();
+  it = vec.insert ( it , 200 );
+
+  vec.insert (it,2,300);
+
+  // "it" no longer valid, get a new one:
+  it = vec.begin();
+
+  std::vector<int> anothervector (2,400);
+  vec.insert (it+2,anothervector.begin(),anothervector.end());
+
+  int myarray [] = { 501,502,503 };
+  vec.insert (vec.begin(), myarray, myarray+3);
+
+  std::cout << "vec contains     :";
+  for (it=vec.begin(); it<vec.end(); it++)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
 }
 
 int main ()
@@ -151,27 +200,7 @@ int main ()
   //ft_resize();
   //ft_erase();
   //ft_get_allocator();
-  std::vector<int> myvector(4);
-  std::cout << "capacity : "<< myvector.capacity() << std::endl;
-  std::cout << "size     : "<< myvector.size() << std::endl;
-  myvector.insert(myvector.begin(), 200);
-  std::cout << "capacity : "<< myvector.capacity() << std::endl;
-  std::cout << "size : "<< myvector.size()<<std::endl;
-  for (size_t i = 0; i < myvector.size(); i++)
-    std::cout << myvector[i] << std::endl;
-
-  std::cout << "***************************\n";
-
-  vector<int> vec(4);
-  std::cout << "capacity : "<< vec.capacity() << std::endl;
-  std::cout << "size     : "<< vec.size() << std::endl;
-  vec.insert(vec.begin(), 200);
-  std::cout << "capacity : "<< vec.capacity() << std::endl;
-  std::cout << "size : "<< vec.size()<<std::endl;
-  for (size_t i = 0; i < vec.size(); i++)
-    std::cout << vec[i] << std::endl;
-
-
+  ft_insert();
   //system("leaks a.out");
   return 0;
 }
