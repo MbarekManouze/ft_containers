@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/21 23:48:52 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/22 22:49:01 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,21 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			for (size_t i = 0; i < n; i++)
 				allocater.construct(_data + i, val);
 		}
+		vector (const vector& x){
+			*this = x;
+		}
 		~vector(){ allocater.deallocate(_data, _capacity); }
 
 		value_type &operator[](size_t index){ return (_data[index]); }
+		vector  &operator=(const vector& x){
+			this->allocater = x.allocater;
+			this->_capacity = x._capacity;
+			this->_size = x._size;
+			this->_data = allocater.allocate(_capacity);
+			for (size_t i = 0; i < _size; i++)
+				this->_data[i] = x._data[i];
+			return (*this);
+		}
 
 		iterator 				begin() { return (iterator (_data)); }
 		iterator 				end() { return (iterator (_data + _size)); }
@@ -219,7 +231,9 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		iterator insert (iterator position, const value_type& val){
 			size_t 	tmp;
 			pointer new_data;
-			if (_size == _capacity)
+			if (_capacity == 0)
+				_capacity = 1;
+			else if (_size == _capacity)
 				_capacity *= 2;
 			new_data = allocater.allocate(_capacity);
 			_size++;
@@ -227,6 +241,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 				if (&position == _data + i){
 					tmp = i;
 					allocater.construct(new_data + i, val);
+					position.get_iterator() = (new_data + i);
 					i++;
 					while (tmp < _size && i < _size){
 						allocater.construct(new_data + i, _data[tmp]);
@@ -247,8 +262,11 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		void insert (iterator position, size_type n, const value_type& val){
 			size_t 	tmp;
 			pointer new_data;
-			if (_size == _capacity)
-				_capacity *= 2;
+			//if (_capacity == 0 || n > (_capacity * 2))
+			//	_capacity = n;
+			//else if (_size == _capacity || n > _capacity)
+			//	_capacity *= 2;
+			_capacity += n;
 			new_data = allocater.allocate(_capacity);
 			_size += n;
 			for (size_t i = 0; i < _size; i++){
@@ -257,9 +275,9 @@ template < class T, class Alloc = std::allocator<T> > class vector
 					while (n > 0)
 					{
 						allocater.construct(new_data + i, val);
+						i++;
 						n--;
 					}
-					i++;
 					while (tmp < _size && i < _size){
 						allocater.construct(new_data + i, _data[tmp]);
 						tmp++;
@@ -269,10 +287,50 @@ template < class T, class Alloc = std::allocator<T> > class vector
 						allocater.destroy(_data + i);
 					allocater.deallocate(_data, _capacity);
 					_data = new_data;
+					return ;
 				}				
 				allocater.construct(new_data + i, _data[i]);
 			}
 		}
+
+		template <class InputIterator>
+		void insert (iterator position, InputIterator first, InputIterator last){
+			size_t diffrence = last - first;
+			std::cout << "difrence : "<< diffrence << std::endl;
+			_capacity += diffrence;
+			_size += diffrence;
+			pointer new_data = allocater.allocate(_capacity);
+			pointer take = allocater.allocate(diffrence);
+			for (int i = 0; i < diffrence ; i++)
+			for (size_t i = 0; i < _size ;i++){
+				if (&position == _data + i){
+					size_t tmp = i;
+					while (diffrence > 0){
+						allocater.construct(&new_data[i], 10);
+						i++;
+						//first++;
+						diffrence--;
+					}
+					while (i < _size){
+						allocater.construct(new_data + i, _data[tmp]);
+						tmp++;
+						i++;
+					}
+					for (size_t i = 0; i < _size; i++)
+						allocater.destroy(_data + i);
+					allocater.deallocate(_data, _capacity);
+					_data = new_data;
+					return ;
+				}
+				allocater.construct(new_data + i, _data[i]);
+			}
+		}
+
+		///////////////////////////////////////////
+
+
+
+		
 
 
 	private :

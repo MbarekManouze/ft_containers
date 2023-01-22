@@ -148,51 +148,74 @@ void ft_get_allocator()
 
 void ft_insert()
 {
-  std::vector<int> myvector (3,100);
-  std::vector<int>::iterator it;
+  //std::vector<int> myvector (3,100);
+  //std::vector<int>::iterator it;
 
-  it = myvector.begin();
-  it = myvector.insert ( it , 200 );
+  //it = myvector.begin();
+  //it = myvector.insert ( it , 200 );
 
-  myvector.insert (it,2,300);
+  //myvector.insert (it,2,300);
 
-  // "it" no longer valid, get a new one:
-  it = myvector.begin();
+  //// "it" no longer valid, get a new one:
+  //it = myvector.begin();
 
-  std::vector<int> anothervector (2,400);
-  myvector.insert (it+2,anothervector.begin(),anothervector.end());
+  //std::vector<int> anothervector (2,400);
+  //myvector.insert (it+2,anothervector.begin(),anothervector.end());
 
-  int myarray [] = { 501,502,503 };
-  myvector.insert (myvector.begin(), myarray, myarray+3);
+  //int myarray [] = { 501,502,503 };
+  //myvector.insert (myvector.begin(), myarray, myarray+3);
 
-  std::cout << "myvector contains:";
-  for (it=myvector.begin(); it<myvector.end(); it++)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  //std::cout << "myvector contains:";
+  //for (it=myvector.begin(); it<myvector.end(); it++)
+  //  std::cout << ' ' << *it;
+  //std::cout << '\n';
 
-  std::cout << "***************************\n";
+  //std::cout << "***************************\n";
 
-  vector<int> vec (3,100);
-  vector<int>::iterator it;
+  vector<int> vec;
+  vector<int>::iterator iterator;
 
-  it = vec.begin();
-  it = vec.insert ( it , 200 );
+  //iterator = vec.begin();
+  //iterator = vec.insert ( iterator , 200 );
 
-  vec.insert (it,2,300);
+  vec.insert (iterator,2,300);
+  //vec.insert(iterator, 2, 300);
+  // "iterator" no longer valid, get a new one:
+  //iterator = vec.begin();
 
-  // "it" no longer valid, get a new one:
-  it = vec.begin();
+  //std::vector<int> vec_second (2,400);
+  //vec.insert (iterator+2,vec_second.begin(),vec_second.end());
 
-  std::vector<int> anothervector (2,400);
-  vec.insert (it+2,anothervector.begin(),anothervector.end());
+  int arr [] = { 501,502,503 };
+  vec.insert (vec.begin(), arr, arr+3);
+  //std::cout << "vec contains     :";
+  //for (iterator=vec.begin(); iterator<vec.end(); iterator++)
+  //  std::cout << ' ' << *iterator;
+  //std::cout << '\n';
+}
 
-  int myarray [] = { 501,502,503 };
-  vec.insert (vec.begin(), myarray, myarray+3);
+void ft_equal_operator()
+{
+  std::vector<int> foo (3,0);
+  std::vector<int> bar (foo);
 
-  std::cout << "vec contains     :";
-  for (it=vec.begin(); it<vec.end(); it++)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  //bar = foo;
+  //foo = std::vector<int>();
+
+  std::cout << "Size of foo: " << int(foo.size()) << '\n';
+  std::cout << "Size of bar: " << int(bar.size()) << '\n';
+
+  std::cout << "*************************" << std::endl;
+
+
+  vector<int> original (3,0);
+  vector<int> second (original);
+
+  //second = original;
+  //original = vector<int>();
+
+  std::cout << "Size of original: " << int(original.size()) << '\n';
+  std::cout << "Size of second: " << int(second.size()) << '\n';
 }
 
 int main ()
@@ -201,6 +224,19 @@ int main ()
   //ft_erase();
   //ft_get_allocator();
   ft_insert();
+  //ft_equal_operator();
+  //  std::vector<int> myvector;
+  //myvector.push_back (100);
+  //myvector.push_back (200);
+  //myvector.push_back (300);
+
+  //std::cout <<"size     : " <<myvector.size() << std::endl;
+  //std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
+  //myvector.pop_back();
+  //std::cout <<"size     : " <<myvector.size() << std::endl;
+  //std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
+
+
   //system("leaks a.out");
   return 0;
 }
