@@ -148,16 +148,16 @@ void ft_get_allocator()
 
 void ft_insert()
 {
-  //std::vector<int> myvector (3,100);
-  //std::vector<int>::iterator it;
+  std::vector<int> myvector (3,100);
+  std::vector<int>::iterator it;
 
-  //it = myvector.begin();
-  //it = myvector.insert ( it , 200 );
+  it = myvector.begin();
+  it = myvector.insert ( it , 200 );
 
-  //myvector.insert (it,2,300);
+  myvector.insert (it,2,300);
 
-  //// "it" no longer valid, get a new one:
-  //it = myvector.begin();
+  // "it" no longer valid, get a new one:
+  it = myvector.begin();
 
   //std::vector<int> anothervector (2,400);
   //myvector.insert (it+2,anothervector.begin(),anothervector.end());
@@ -165,33 +165,33 @@ void ft_insert()
   //int myarray [] = { 501,502,503 };
   //myvector.insert (myvector.begin(), myarray, myarray+3);
 
-  //std::cout << "myvector contains:";
-  //for (it=myvector.begin(); it<myvector.end(); it++)
-  //  std::cout << ' ' << *it;
-  //std::cout << '\n';
+  std::cout << "myvector contains:";
+  for (it=myvector.begin(); it<myvector.end(); it++)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
 
-  //std::cout << "***************************\n";
+  std::cout << "***************************\n";
 
-  vector<int> vec;
+  vector<int> vec(3, 100);
   vector<int>::iterator iterator;
 
-  //iterator = vec.begin();
-  //iterator = vec.insert ( iterator , 200 );
+  iterator = vec.begin();
+  iterator = vec.insert ( iterator , 200 );
 
   vec.insert (iterator,2,300);
-  //vec.insert(iterator, 2, 300);
+
   // "iterator" no longer valid, get a new one:
-  //iterator = vec.begin();
+  iterator = vec.begin();
 
   //std::vector<int> vec_second (2,400);
   //vec.insert (iterator+2,vec_second.begin(),vec_second.end());
 
-  int arr [] = { 501,502,503 };
-  vec.insert (vec.begin(), arr, arr+3);
-  //std::cout << "vec contains     :";
-  //for (iterator=vec.begin(); iterator<vec.end(); iterator++)
-  //  std::cout << ' ' << *iterator;
-  //std::cout << '\n';
+  //int arr [] = { 501,502,503 };
+  //vec.insert (vec.begin(), arr, arr+3);
+  std::cout << "vec contains     :";
+  for (iterator=vec.begin(); iterator<vec.end(); iterator++)
+    std::cout << ' ' << *iterator;
+  std::cout << '\n';
 }
 
 void ft_equal_operator()
@@ -218,24 +218,184 @@ void ft_equal_operator()
   std::cout << "Size of second: " << int(second.size()) << '\n';
 }
 
+void ft_pop_back(){
+  std::vector<int> myvector;
+  myvector.push_back (100);
+  myvector.push_back (200);
+  myvector.push_back (300);
+
+  myvector.pop_back();
+  std::cout <<"size     : " <<myvector.size() << std::endl;
+  std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
+  myvector.pop_back();
+  std::cout <<"size     : " <<myvector.size() << std::endl;
+  std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
+  myvector.pop_back();
+  std::cout <<"size     : " <<myvector.size() << std::endl;
+  std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
+  std::cout << "*************************\n";
+
+  vector<int> vec;
+  vec.push_back (100);
+  vec.push_back (200);
+  vec.push_back (300);
+
+  vec.pop_back();
+  std::cout <<"size     : " <<vec.size() << std::endl;
+  std::cout <<"capacity : " <<vec.capacity() << std::endl; 
+  vec.pop_back();
+  std::cout <<"size     : " <<vec.size() << std::endl;
+  std::cout <<"capacity : " <<vec.capacity() << std::endl; 
+  vec.pop_back();
+  std::cout <<"size     : " <<vec.size() << std::endl;
+  std::cout <<"capacity : " <<vec.capacity() << std::endl;
+}
+
+void ft_reserve()
+{
+  std::vector<int>::size_type sz;
+
+  std::vector<int> foo;
+  sz = foo.capacity();
+  std::cout << "making foo grow:\n";
+  for (int i=0; i<100; ++i) {
+    foo.push_back(i);
+    if (sz!=foo.capacity()) {
+      sz = foo.capacity();
+      std::cout << "capacity changed: " << sz << '\n';
+    }
+  }
+
+  std::vector<int> bar;
+  sz = bar.capacity();
+  bar.reserve(100);   // this is the only difference with foo above
+  std::cout << "making bar grow:\n";
+  for (int i=0; i<100; ++i) {
+    bar.push_back(i);
+    if (sz!=bar.capacity()) {
+      sz = bar.capacity();
+      std::cout << "capacity changed: " << sz << '\n';
+    }
+  }
+
+  std::cout << "***************************" << std::endl;
+
+  std::vector<int>::size_type size;
+
+  vector<int> ok;
+  size = ok.capacity();
+  std::cout << "making ok grow:\n";
+  for (int i=0; i<100; ++i) {
+    ok.push_back(i);
+    if (size!=ok.capacity()) {
+      size = ok.capacity();
+      std::cout << "capacity changed: " << size << '\n';
+    }
+  }
+
+  vector<int> ko;
+  size = ko.capacity();
+  ko.reserve(100);   // this is the only difference with ok above
+  std::cout << "making ko grow:\n";
+  for (int i=0; i<100; ++i) {
+    //std::cout << "ihoo\n";
+    ko.push_back(i);
+    if (size!=ko.capacity()) {
+      size = ko.capacity();
+      std::cout << "capacity changed: " << size << '\n';
+      //std::cout << "_size    changed: " << ko.size() << '\n';
+    }
+  }
+
+
+}
+
+void ft_swap()
+{
+  std::vector<int> foo (3,100);   // three ints with a value of 100
+  std::vector<int> bar (5,200);   // five ints with a value of 200
+
+  foo.swap(bar);
+
+  std::cout << "foo contains:";
+  for (unsigned i=0; i<foo.size(); i++)
+    std::cout << ' ' << foo[i];
+  std::cout << '\n';
+
+  std::cout << "bar contains:";
+  for (unsigned i=0; i<bar.size(); i++)
+    std::cout << ' ' << bar[i];
+  std::cout << '\n';
+
+  std::cout << "***************************\n";
+
+  vector<int> ok (3,100);   // three ints with a value of 100
+  vector<int> ko (5,200);   // five ints with a value of 200
+
+  ok.swap(ko);
+
+  std::cout << "ok contains :";
+  for (unsigned i=0; i<ok.size(); i++)
+    std::cout << ' ' << ok[i];
+  std::cout << '\n';
+
+  std::cout << "ko contains :";
+  for (unsigned i=0; i<ko.size(); i++)
+    std::cout << ' ' << ko[i];
+  std::cout << '\n';
+
+
+}
+
 int main ()
 {
   //ft_resize();
   //ft_erase();
   //ft_get_allocator();
-  ft_insert();
+  //ft_insert(); // methode with template type InputIterator remains
   //ft_equal_operator();
-  //  std::vector<int> myvector;
-  //myvector.push_back (100);
-  //myvector.push_back (200);
-  //myvector.push_back (300);
+  //ft_pop_back();
+  //ft_reserve();
+  //ft_swap();
+  std::vector<int> myvector;
+  std::vector<int>::reverse_iterator reverse_iterbegin;
+  std::vector<int>::reverse_iterator reverse_iterend;
 
-  //std::cout <<"size     : " <<myvector.size() << std::endl;
-  //std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
-  //myvector.pop_back();
-  //std::cout <<"size     : " <<myvector.size() << std::endl;
-  //std::cout <<"capacity : " <<myvector.capacity() << std::endl; 
+  myvector.push_back(4);
+  myvector.push_back(4);
+  myvector.push_back(3);
+  myvector.push_back(7);
+  myvector.push_back(25);
 
+  reverse_iterbegin = myvector.rbegin();
+  reverse_iterend   = myvector.rend();
+
+  while (reverse_iterbegin != reverse_iterend)
+  {
+    std::cout << *reverse_iterbegin << std::endl;
+    reverse_iterbegin++;
+  }
+
+  std::cout << "**************************\n";
+
+  vector<int> vec;
+  vector<int>::reverse_iterator r_iterbegin;
+  vector<int>::reverse_iterator r_iterend;
+
+  vec.push_back(4);
+  vec.push_back(4);
+  vec.push_back(3);
+  vec.push_back(7);
+  vec.push_back(25);
+
+  r_iterbegin = vec.rbegin();
+  r_iterend   = vec.rend();
+
+  while (r_iterbegin != r_iterend)
+  {
+    std::cout << *r_iterbegin << std::endl;
+    r_iterbegin++;
+  }
 
   //system("leaks a.out");
   return 0;

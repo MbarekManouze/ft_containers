@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/22 22:49:01 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/23 18:11:20 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,21 @@
 #include <new>
 #include <memory>
 #include "Iterator.hpp"
+#include "reverse_Iterator.hpp"
 
 template < class T, class Alloc = std::allocator<T> > class vector
 {
 	public :
 
 		typedef Iterator<T> 					iterator;
+		typedef Reverse_Iterator <T>				reverse_iterator;
 		typedef T 								value_type;
 		typedef Alloc							allocator_type;
 		typedef T& 								reference;
 		typedef const T* 						const_reference;
 		typedef T* 								pointer;
 		typedef const T* 						const_pointer;
-		//typedef typename Alloc::diffrence_type 	difference_type;
+		typedef typename std::ptrdiff_t 	difference_type;
 		typedef typename Alloc::size_type 		size_type; 
 		typedef T* 								Iterator;
 		typedef const T* 						const_Iterator;
@@ -59,8 +61,8 @@ template < class T, class Alloc = std::allocator<T> > class vector
 
 		iterator 				begin() { return (iterator (_data)); }
 		iterator 				end() { return (iterator (_data + _size)); }
-		const_Iterator 			cbegin() const throw() { return (iterator (_data)); }
-		const_Iterator 			cend() const throw() { return (iterator (_data + _size)); }
+		reverse_iterator 		rbegin() { return (reverse_iterator (_data + (_size - 1))); }
+		reverse_iterator 		rend() { return (reverse_iterator (_data - 1)); }
 		size_type 				size() const { return (_size); }
 		size_t 					max_size() const { return std::numeric_limits<std::size_t>::max() / sizeof(T); }
 		size_type 				capacity() const { return (_capacity); }
@@ -165,11 +167,12 @@ template < class T, class Alloc = std::allocator<T> > class vector
 
 			// RESIZE FUNCTION IMPLEMENTATION
 
-			if (_size == 0)
-				_capacity *= 2;
+			//if (_size == 0)
+			//	_capacity *= 2;
 			if (_size == _capacity)
 			{
 				size_t new_capacity = _capacity ? _capacity * 2 : 1;
+				//std::cout << "capacity : "<<new_capacity<<std::endl;
 				pointer _new_data = allocater.allocate(new_capacity);
 				for (size_t i = 0; i < _size; i++)
 					allocater.construct(_new_data + i , _data[i]);
@@ -187,6 +190,18 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			_data[_size] = value;
 			_size++;
 			//std::cout << "alright "<< std::endl;
+		}
+
+		/////////////////////////////////
+
+		void pop_back(){
+			if (_size > 0){
+				allocater.destroy(_data + (_size - 1));
+				_size--;
+			}
+			else {
+				// probabely an exeption.
+			}
 		}
 
 		/////////////////////////////////
@@ -293,45 +308,71 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			}
 		}
 
-		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last){
-			size_t diffrence = last - first;
-			std::cout << "difrence : "<< diffrence << std::endl;
-			_capacity += diffrence;
-			_size += diffrence;
-			pointer new_data = allocater.allocate(_capacity);
-			pointer take = allocater.allocate(diffrence);
-			for (int i = 0; i < diffrence ; i++)
-			for (size_t i = 0; i < _size ;i++){
-				if (&position == _data + i){
-					size_t tmp = i;
-					while (diffrence > 0){
-						allocater.construct(&new_data[i], 10);
-						i++;
-						//first++;
-						diffrence--;
-					}
-					while (i < _size){
-						allocater.construct(new_data + i, _data[tmp]);
-						tmp++;
-						i++;
-					}
-					for (size_t i = 0; i < _size; i++)
-						allocater.destroy(_data + i);
-					allocater.deallocate(_data, _capacity);
-					_data = new_data;
-					return ;
-				}
-				allocater.construct(new_data + i, _data[i]);
-			}
-		}
+		//template <class InputIterator>
+		//void insert (iterator position, InputIterator first, InputIterator last){
+		//	size_t diffrence = last - first;
+		//	std::cout << "difrence : "<< diffrence << std::endl;
+		//	_capacity += diffrence;
+		//	_size += diffrence;
+		//	pointer new_data = allocater.allocate(_capacity);
+		//	pointer take = allocater.allocate(diffrence);
+		//	for (int i = 0; i < diffrence ; i++)
+		//	for (size_t i = 0; i < _size ;i++){
+		//		if (&position == _data + i){
+		//			size_t tmp = i;
+		//			while (diffrence > 0){
+		//				allocater.construct(&new_data[i], 10);
+		//				i++;
+		//				//first++;
+		//				diffrence--;
+		//			}
+		//			while (i < _size){
+		//				allocater.construct(new_data + i, _data[tmp]);
+		//				tmp++;
+		//				i++;
+		//			}
+		//			for (size_t i = 0; i < _size; i++)
+		//				allocater.destroy(_data + i);
+		//			allocater.deallocate(_data, _capacity);
+		//			_data = new_data;
+		//			return ;
+		//		}
+		//		allocater.construct(new_data + i, _data[i]);
+		//	}
+		//}
 
 		///////////////////////////////////////////
 
-
-
+		void reserve (size_type n){
+			if (n > _capacity){
+				pointer new_data = allocater.allocate(n);
+				for (size_t i = 0; i < _size; i++){
+					allocater.construct(new_data + i, _data[i]);
+					allocater.destroy(_data + i);
+				}
+				allocater.deallocate(_data, _capacity);
+				_data = new_data;
+				_capacity = n;
+			}
+		}
 		
+		///////////////////////////////////////////
 
+		void swap (vector& x){
+			
+			pointer tmp_data = x._data;
+			size_t tmp_capacity = x._capacity;
+			size_t tmp_size = x._size;
+
+			x._data = this->_data;
+			x._capacity = this->_capacity;
+			x._size = this->_size;
+
+			this->_data = tmp_data;
+			this->_capacity = tmp_capacity;
+			this->_size = tmp_size;
+
+		}
 
 	private :
 		T				*_data;
