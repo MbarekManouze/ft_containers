@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 09:23:41 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/22 11:46:38 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/25 16:21:56 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,15 @@ template <class T> class Iterator
         reference operator[](difference_type n) const { return _iterator_data[n]; }
         pointer operator&() { return (_iterator_data); }
         pointer &get_iterator(){ return (_iterator_data); }
-
-	private :
+        friend std::ostream &operator<<(std::ostream &os, Iterator const &object){
+            os << object.operator*() << std::endl;
+            return os;
+        }
+	protected :
 		T *_iterator_data;
 };
+
+
 
 
 #endif

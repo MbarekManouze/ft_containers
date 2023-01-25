@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/23 18:11:20 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:01:43 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 	public :
 
 		typedef Iterator<T> 					iterator;
-		typedef Reverse_Iterator <T>				reverse_iterator;
 		typedef T 								value_type;
 		typedef Alloc							allocator_type;
 		typedef T& 								reference;
@@ -61,8 +60,8 @@ template < class T, class Alloc = std::allocator<T> > class vector
 
 		iterator 				begin() { return (iterator (_data)); }
 		iterator 				end() { return (iterator (_data + _size)); }
-		reverse_iterator 		rbegin() { return (reverse_iterator (_data + (_size - 1))); }
-		reverse_iterator 		rend() { return (reverse_iterator (_data - 1)); }
+		iterator 				rbegin() { return (iterator (_data + _size)); }
+		iterator 				rend() { return (iterator (_data)); }
 		size_type 				size() const { return (_size); }
 		size_t 					max_size() const { return std::numeric_limits<std::size_t>::max() / sizeof(T); }
 		size_type 				capacity() const { return (_capacity); }
@@ -308,38 +307,37 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			}
 		}
 
-		//template <class InputIterator>
-		//void insert (iterator position, InputIterator first, InputIterator last){
-		//	size_t diffrence = last - first;
-		//	std::cout << "difrence : "<< diffrence << std::endl;
-		//	_capacity += diffrence;
-		//	_size += diffrence;
-		//	pointer new_data = allocater.allocate(_capacity);
-		//	pointer take = allocater.allocate(diffrence);
-		//	for (int i = 0; i < diffrence ; i++)
-		//	for (size_t i = 0; i < _size ;i++){
-		//		if (&position == _data + i){
-		//			size_t tmp = i;
-		//			while (diffrence > 0){
-		//				allocater.construct(&new_data[i], 10);
-		//				i++;
-		//				//first++;
-		//				diffrence--;
-		//			}
-		//			while (i < _size){
-		//				allocater.construct(new_data + i, _data[tmp]);
-		//				tmp++;
-		//				i++;
-		//			}
-		//			for (size_t i = 0; i < _size; i++)
-		//				allocater.destroy(_data + i);
-		//			allocater.deallocate(_data, _capacity);
-		//			_data = new_data;
-		//			return ;
-		//		}
-		//		allocater.construct(new_data + i, _data[i]);
-		//	}
-		//}
+		template <class InputIterator>
+		void insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
+			size_t diffrence = last - first;
+			_capacity += diffrence;
+			_size += diffrence;
+			pointer new_data = allocater.allocate(_capacity);
+			pointer take = allocater.allocate(diffrence);
+			for (int i = 0; i < diffrence ; i++)
+			for (size_t i = 0; i < _size ;i++){
+				if (&position == _data + i){
+					size_t tmp = i;
+					while (diffrence > 0){
+						allocater.construct(&new_data[i], *first);
+						i++;
+						first++;
+						diffrence--;
+					}
+					while (i < _size){
+						allocater.construct(new_data + i, _data[tmp]);
+						tmp++;
+						i++;
+					}
+					for (size_t i = 0; i < _size; i++)
+						allocater.destroy(_data + i);
+					allocater.deallocate(_data, _capacity);
+					_data = new_data;
+					return ;
+				}
+				allocater.construct(new_data + i, _data[i]);
+			}
+		}
 
 		///////////////////////////////////////////
 
@@ -359,7 +357,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		///////////////////////////////////////////
 
 		void swap (vector& x){
-			
+
 			pointer tmp_data = x._data;
 			size_t tmp_capacity = x._capacity;
 			size_t tmp_size = x._size;
@@ -373,6 +371,43 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			this->_size = tmp_size;
 
 		}
+
+
+		//////////////////////////////////////////
+
+		void assign (size_type n, const value_type& val){
+			size_t new_capacity = n;
+			pointer new_data;
+			new_data = allocater.allocate(new_capacity);
+			for (size_t i = 0; i < n; i++){
+				allocater.construct(new_data + i, val);
+				if (i < _size)
+					allocater.destroy(_data + i);
+			}
+			allocater.deallocate(_data, _capacity);
+			_data = new_data;
+			_size = n;
+			_capacity = new_capacity;
+		}
+		
+		template <class InputIterator>
+		void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
+			
+			size_t difference = last - first;
+			pointer new_data = allocater.allocate(difference);
+
+			for (size_t i = 0; i < difference ; i++){
+				allocater.construct(new_data + i, *first);
+				if (i < _size)
+					allocater.destroy(_data + i);
+				first++;
+			}
+			allocater.dealloacte(_data, _capacity);
+			_data = new_data;
+			_capacity = difference;
+			_size = difference;
+		}
+
 
 	private :
 		T				*_data;

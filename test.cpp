@@ -2,6 +2,7 @@
 //#include <vector>
 #include "vector.hpp"
 #include "Iterator.hpp"
+#include "reverse_Iterator.hpp"
 
 #include <vector>
 
@@ -347,16 +348,9 @@ void ft_swap()
 
 }
 
-int main ()
+void ft_rev_iterator()
 {
-  //ft_resize();
-  //ft_erase();
-  //ft_get_allocator();
-  //ft_insert(); // methode with template type InputIterator remains
-  //ft_equal_operator();
-  //ft_pop_back();
-  //ft_reserve();
-  //ft_swap();
+
   std::vector<int> myvector;
   std::vector<int>::reverse_iterator reverse_iterbegin;
   std::vector<int>::reverse_iterator reverse_iterend;
@@ -379,17 +373,15 @@ int main ()
   std::cout << "**************************\n";
 
   vector<int> vec;
-  vector<int>::reverse_iterator r_iterbegin;
-  vector<int>::reverse_iterator r_iterend;
-
+  typedef vector<int>::iterator it;
   vec.push_back(4);
   vec.push_back(4);
   vec.push_back(3);
   vec.push_back(7);
   vec.push_back(25);
+  Reverse_Iterator<it> r_iterbegin(vec.rbegin());
+  Reverse_Iterator<it> r_iterend(vec.rend());
 
-  r_iterbegin = vec.rbegin();
-  r_iterend   = vec.rend();
 
   while (r_iterbegin != r_iterend)
   {
@@ -397,7 +389,74 @@ int main ()
     r_iterbegin++;
   }
 
-  //system("leaks a.out");
+}
+
+void ft_assign()
+{
+  std::vector<int> first;
+  std::vector<int> second;
+  std::vector<int> third;
+
+  first.assign (7,100);   // 7 ints with a value of 100
+  std::cout << "size     : "<<first.size()<<std::endl;
+  std::cout << "capacity : "<<first.capacity()<<std::endl;
+  first.assign (20,100);   // 7 ints with a value of 100
+  std::cout << "size     : "<<first.size()<<std::endl;
+  std::cout << "capacity : "<<first.capacity()<<std::endl;
+
+  //std::vector<int>::iterator it;
+  //it=first.begin()+1;
+
+  //second.assign (it,first.end()-1); // the 5 central values of first
+
+  //int myints[] = {1776,7,4};
+  //third.assign (myints,myints+3);   // assigning from array.
+
+  std::cout << "Size of first: " << int (first.size()) << '\n';
+  //std::cout << "Size of second: " << int (second.size()) << '\n';
+  //std::cout << "Size of third: " << int (third.size()) << '\n';
+
+  std::cout << "*****************************\n";
+
+  vector<int> lawal;
+  vector<int> tani;
+  vector<int> talt;
+
+  lawal.assign (7,100);   // 7 ints with a value of 100
+  std::cout << "size     : "<<lawal.size()<<std::endl;
+  std::cout << "capacity : "<<lawal.capacity()<<std::endl;
+  lawal.assign (20,100);   // 7 ints with a value of 100
+  std::cout << "size     : "<<lawal.size()<<std::endl;
+  std::cout << "capacity : "<<lawal.capacity()<<std::endl;
+
+  //vector<int>::iterator it;
+  //it=lawal.begin()+1;
+
+  //tani.assign (it,lawal.end()-1); // the 5 central values of lawal
+
+  //int myints[] = {1776,7,4};
+  //talt.assign (myints,myints+3);   // assigning from array.
+
+  std::cout << "Size of lawal: " << int (lawal.size()) << '\n';
+  //std::cout << "Size of tani: " << int (tani.size()) << '\n';
+  //std::cout << "Size of talt: " << int (talt.size()) << '\n';
+
+
+}
+
+int main ()
+{
+  //ft_resize();
+  //ft_erase();
+  //ft_get_allocator();
+  //ft_insert(); // methode with template type InputIterator remains
+  //ft_equal_operator();
+  //ft_pop_back();
+  //ft_reserve();
+  //ft_swap();
+  //ft_rev_iterator();
+  ft_assign();
+  system("leaks a.out");
   return 0;
 }
 
