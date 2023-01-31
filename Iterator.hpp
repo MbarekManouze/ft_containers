@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 09:23:41 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/25 16:21:56 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/01/29 20:37:20 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ template <class T> class Iterator
 		Iterator():_iterator_data(NULL){}
 		Iterator(T *data):_iterator_data(data){}
         Iterator(const Iterator &object){ this->operator=(object); }
-        Iterator& operator=(Iterator const &object) { this->_iterator_data = object._iterator_data; return (*this); }
-		reference operator*() const { return *_iterator_data; }
+        Iterator& operator=(Iterator const &object) { this->_iterator_data = object._iterator_data; return (*this); }		
+        reference operator*() const { return *_iterator_data; }
         pointer operator->() const { return _iterator_data; }
         Iterator& operator++() { ++_iterator_data; return *this; }
         Iterator operator++(int) { Iterator tmp(*this); operator++(); return tmp; }

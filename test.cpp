@@ -384,6 +384,37 @@ void ft_rev_iterator()
 
 }
 
+template <typename Iter>
+void print_range(Iter first, Iter last)
+{
+    for (Iter it = first; it != last; ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+void ft_()
+{
+  ft::vector<double> v;
+  for (int i = 0; i < 26; ++i) {
+            v.push_back(45.0123);
+    if (!(v.capacity() >= v.size())) {
+          std::cout << "msg";
+            std::cout<<"Capacity is smaller than size"<<std::endl;
+        } else {
+            std::cout<<"Capacity Ok"<<std::endl;;
+        }  
+        std::cout << "\nVector content:\n";
+         print_range(v.begin(), v.end());
+  }
+  v.push_back(6);
+  std::cout << "size: " << v.size() << '\n';
+  std::cout << "capacity: " << v.capacity() << '\n';
+  v.push_back(-4356.8933);
+  std::cout << "size: " << v.size() << '\n';
+  std::cout << "capacity: " << v.capacity() << '\n';
+}
+
+
 void ft_assign()
 {
   std::vector<int> first;
@@ -433,87 +464,166 @@ void ft_assign()
   std::cout << "Size of lawal: " << int (lawal.size()) << '\n';
   std::cout << "Size of tani: " << int (tani.size()) << '\n';
   std::cout << "Size of talt: " << int (talt.size()) << '\n';
-
-
 }
 
-template <typename Iter>
-void print_range(Iter first, Iter last)
+void ft_assign_tester()
 {
-    for (Iter it = first; it != last; ++it) {
-        std::cout << *it << " ";
+    {
+      std::vector<char> v;
+
+      v.assign(0, 'c');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+      v.assign(64, 'A');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(32, '5');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(49, '8');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(77, '2');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
     }
-    std::cout << std::endl;
+    std::cout<<"***********************\n";
+    { 
+      ft::vector<char> v;
+
+      v.assign(0, 'c');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(64, 'A');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(32, '5');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(49, '8');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+      v.assign(77, '2');
+      std::cout << "capacity : "<< v.capacity()<<std::endl;
+      std::cout << "size : "<< v.size()<<std::endl;
+
+    }
+    std::cout<<"***********************\n";
+    {
+      std::vector<std::string> v;
+      size_t i = 0;
+      v.assign(0, "");
+      //std::cout << "capacity : "<< v.capacity()<<std::endl;
+      //std::cout << "size : "<< v.size()<<std::endl;
+      std::vector<std::string>::iterator it = v.begin();
+      while (it != v.end())
+      {
+        std::cout << *it << std::endl;
+        it++;
+      }
+      v.assign(64, "vector-string");
+      //std::cout << "capacity : "<< v.capacity()<<std::endl;
+      //std::cout << "size : "<< v.size()<<std::endl;
+      it = v.begin();
+      while (it != v.end())
+      {
+        std::cout << *it << std::endl;
+        it++;
+        i++;
+      }
+      std::cout << i << std::endl;
+    }
+    std::cout<<"***********************\n";
+    {
+      ft::vector<std::string> v;
+      size_t i = 0;
+
+      v.assign(0, "");
+      ft::vector<std::string>::iterator it;
+      it = v.begin();
+      while (it != v.end())
+      {
+        std::cout << *it << std::endl;
+        it++;
+      }
+      //std::cout << "capacity : "<< v.capacity()<<std::endl;
+      //std::cout << "size : "<< v.size()<<std::endl;
+      v.assign(64, "vector-string");
+      it = v.begin();
+      while (it != v.end())
+      {
+        std::cout << *it << std::endl;
+        it++;
+        i++;
+      }
+      std::cout << i << std::endl;
+      //std::cout << "capacity : "<< v.capacity()<<std::endl;
+      //std::cout << "size : "<< v.size()<<std::endl;    
+    }
 }
-void ft_()
+
+void ft_back()
 {
-  ft::vector<double> v;
-  for (int i = 0; i < 26; ++i) {
-            v.push_back(45.0123);
-    if (!(v.capacity() >= v.size())) {
-          std::cout << "msg";
-            std::cout<<"Capacity is smaller than size"<<std::endl;
-        } else {
-            std::cout<<"Capacity Ok"<<std::endl;;
-        }  
-        std::cout << "\nVector content:\n";
-         print_range(v.begin(), v.end());
+  {  
+    const std::vector<long> v(1, 9);
+
+    std::cout << "Back: "<<v.back()<<std::endl;
+
+    std::vector<long>::const_reference b = v.back();
+    if (&b != &v[0])
+      std::cout << "wrong Reference:\nb : "<<&b<<"v : "<<&v[0]<<std::endl;
   }
-  v.push_back(6);
-  std::cout << "size: " << v.size() << '\n';
-  std::cout << "capacity: " << v.capacity() << '\n';
-  v.push_back(-4356.8933);
-  std::cout << "size: " << v.size() << '\n';
-  std::cout << "capacity: " << v.capacity() << '\n';
+
+  std::cout <<"***********************************\n";
+
+  {  
+    const ft::vector<long> v(1, 9);
+
+    std::cout << "Back: "<<v.back()<<std::endl;
+
+    ft::vector<long>::const_reference b = v.back();
+    if (&b != &v[0])
+      std::cout << "wrong Reference:\nb : "<<&b<<"v : "<<&v[0]<<std::endl;
+  }
 }
 
 int main ()
 {
-  //ft_();
-    std::vector<int> myvector;
-
-  // set some values (from 1 to 10)
-  for (int i=1; i<=10; i++) myvector.push_back(i);
-
-  // erase the 6th element
-  std::vector<int>::iterator it =  myvector.erase (myvector.begin()+5);
-  std::cout <<"*it : "<<std::endl;
-
-  // erase the first 3 elements:
-  //myvector.erase (myvector.begin(),myvector.begin()+3);
-
-  std::cout << "myvector contains:";
-  for (unsigned i=0; i<myvector.size(); ++i)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
+  //std::cout << "\\/////////////////// RESIZE : ////////////////////\n\n";
+  //ft_resize();
+  //std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
+  //ft_erase();
+  //std::cout << "\n\\////////////////// GET_ALLOCATER : ////////////////////\\\n\n";
+  //ft_get_allocator();
+  //std::cout << "\n\\////////////////// INSERT : ////////////////////\\\n\n";
+  //ft_insert(); // methode with template type InputIterator remains
+  //std::cout << "\n\\////////////////// EQUAL_OPERATOR : ////////////////////\\\n\n";
+  //ft_equal_operator();
+  //std::cout << "\n\\////////////////// POP_BACK : ////////////////////\\\n\n";
+  //ft_pop_back();
+  //std::cout << "\n\\////////////////// RESERVE : ////////////////////\\\n\n";
+  //ft_reserve();
+  //std::cout << "\n\\////////////////// SWAP : ////////////////////\\\n\n";
+  //ft_swap();
+  //std::cout << "\n\\////////////////// REV_ITERATOR : ////////////////////\\\n\n";
+  //ft_rev_iterator();
+  //std::cout << "\n\\////////////////// ASSIGN : ////////////////////\\\n\n";
+  //ft_assign();
+  //ft_assign_tester();
+  //std::cout << "\n\\////////////////// BACK : ////////////////////\\\n\n";
+  //ft_back();
+  //std::vector<int> vec(37, -5);
+  //vec.erase(vec.begin() + 1, vec.begin() + 2);
+  //std::cout << "size : "<<vec.size()<<std::endl; 
   //system("leaks a.out");
   return 0;
 }
-
-
-//int main ()
-//{
-//  std::cout << "\\/////////////////// RESIZE : ////////////////////\n\n";
-//  ft_resize();
-//  std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
-//  ft_erase();
-//  std::cout << "\n\\////////////////// GET_ALLOCATER : ////////////////////\\\n\n";
-//  ft_get_allocator();
-//  std::cout << "\n\\////////////////// INSERT : ////////////////////\\\n\n";
-//  ft_insert(); // methode with template type InputIterator remains
-//  std::cout << "\n\\////////////////// EQUAL_OPERATOR : ////////////////////\\\n\n";
-//  ft_equal_operator();
-//  std::cout << "\n\\////////////////// POP_BACK : ////////////////////\\\n\n";
-//  ft_pop_back();
-//  std::cout << "\n\\////////////////// RESERVE : ////////////////////\\\n\n";
-//  ft_reserve();
-//  std::cout << "\n\\////////////////// SWAP : ////////////////////\\\n\n";
-//  ft_swap();
-//  std::cout << "\n\\////////////////// REV_ITERATOR : ////////////////////\\\n\n";
-//  ft_rev_iterator();
-//  std::cout << "\n\\////////////////// ASSIGN : ////////////////////\\\n\n";
-//  ft_assign();
-//  //system("leaks a.out");
-//  return 0;
-//}
 
