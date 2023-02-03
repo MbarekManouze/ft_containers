@@ -1,8 +1,8 @@
 #include <iostream>
 //#include <vector>
-#include "vector.hpp"
-#include "Iterator.hpp"
-#include "reverse_Iterator.hpp"
+#include "./Vector/vector.hpp"
+#include"./iterators/reverse_Iterator.hpp"
+#include"./iterators/Iterator.hpp"
 
 #include <vector>
 
@@ -599,8 +599,8 @@ int main ()
 {
   //std::cout << "\\/////////////////// RESIZE : ////////////////////\n\n";
   //ft_resize();
-  //std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
-  //ft_erase();
+  std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
+  ft_erase();
   //std::cout << "\n\\////////////////// GET_ALLOCATER : ////////////////////\\\n\n";
   //ft_get_allocator();
   //std::cout << "\n\\////////////////// INSERT : ////////////////////\\\n\n";

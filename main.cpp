@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelbakna <lelbakna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 16:17:54 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/01/25 15:10:58 by lelbakna         ###   ########.fr       */
+/*   Updated: 2023/02/02 11:36:03 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.hpp"
-#include"reverse_Iterator.hpp"
-#include"Iterator.hpp"
+#include "./Vector/vector.hpp"
+#include"./iterators/reverse_Iterator.hpp"
+#include"./iterators/Iterator.hpp"
 int main ()
 {
 //   ft_();
