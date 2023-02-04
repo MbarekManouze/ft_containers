@@ -1,5 +1,5 @@
 #include <iostream>
-//#include <vector>
+#include <vector>
 #include "./Vector/vector.hpp"
 #include"./iterators/reverse_Iterator.hpp"
 #include"./iterators/Iterator.hpp"
@@ -372,15 +372,15 @@ void ft_rev_iterator()
   vec.push_back(3);
   vec.push_back(7);
   vec.push_back(25);
-  Reverse_Iterator<it> r_iterbegin(vec.rbegin());
-  Reverse_Iterator<it> r_iterend(vec.rend());
+  //Reverse_Iterator<it> r_iterbegin(vec.rbegin());
+  //Reverse_Iterator<it> r_iterend(vec.rend());
 
 
-  while (r_iterbegin != r_iterend)
-  {
-    std::cout << *r_iterbegin << std::endl;
-    r_iterbegin++;
-  }
+  //while (r_iterbegin != r_iterend)
+  //{
+  //  std::cout << *r_iterbegin << std::endl;
+  //  r_iterbegin++;
+  //}
 
 }
 
@@ -599,8 +599,8 @@ int main ()
 {
   //std::cout << "\\/////////////////// RESIZE : ////////////////////\n\n";
   //ft_resize();
-  std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
-  ft_erase();
+  //std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
+  //ft_erase();
   //std::cout << "\n\\////////////////// GET_ALLOCATER : ////////////////////\\\n\n";
   //ft_get_allocator();
   //std::cout << "\n\\////////////////// INSERT : ////////////////////\\\n\n";
@@ -623,6 +623,59 @@ int main ()
   //std::vector<int> vec(37, -5);
   //vec.erase(vec.begin() + 1, vec.begin() + 2);
   //std::cout << "size : "<<vec.size()<<std::endl; 
+    
+    //{
+      std::vector<long> v;
+
+      v.push_back(55);
+      v.push_back(1);
+      v.push_back(1);
+      v.push_back(1);
+      v.push_back(1);
+      v.push_back(1);
+      v.push_back(1);
+      v.push_back(99);
+
+
+      std::reverse(v.rbegin(), v.rend());
+
+      std::vector<long>::iterator bg = v.begin();
+      std::vector<long>::iterator en = v.end();
+      while (bg != en)
+      {
+        std::cout << *bg << std::endl;
+        bg++;
+      }
+      
+    //}
+    std::cout << "***************************\n";
+    //{
+        ft::vector<long> vec;
+
+        vec.push_back(55);
+        vec.push_back(1);
+        vec.push_back(1);
+        vec.push_back(1);
+        vec.push_back(1);
+        vec.push_back(1);
+        vec.push_back(1);
+        vec.push_back(99);
+
+
+        std::reverse(vec.rbegin(), vec.rend());
+
+        ft::vector<long>::iterator bg_it = vec.begin();
+        ft::vector<long>::iterator end_it = vec.end();
+        while (bg_it != end_it)
+        {
+          std::cout << *bg_it << std::endl;
+          bg_it++;
+        }
+        if (vec < v ){
+          std::cout << "ok\n";
+        }
+    //}
+
   //system("leaks a.out");
   return 0;
 }

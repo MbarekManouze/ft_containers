@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/03 11:49:02 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/02/04 23:07:35 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,20 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		iterator 				end() { return (iterator (_data + _size)); }
 		const_Iterator 			begin() const {return (const_Iterator(_data));}
 		const_Iterator 			end() const { return (const_Iterator (_data + _size)); }
-		iterator 				rbegin() { return (iterator (_data + _size)); }
-		iterator 				rend() { return (iterator (_data)); }
+		reverse_iterator 				rbegin() { /*std::cout <<"rebegiin : "<< *(_data + _size-1) <<std::endl;*/return (reverse_iterator (_data + _size)); }
+		reverse_iterator 				rend() { /*std::cout <<"reend : "<< *(_data) <<std::endl;*/return (reverse_iterator (_data)); }
+		const_reverse_iterator  rbegin() const {return const_reverse_iterator(_data + _size);}
+		const_reverse_iterator  rend() const {return const_reverse_iterator(_data);}
 		size_type 				size() const { return (_size); }
-		size_t 					max_size() const { return std::numeric_limits<std::size_t>::max() / sizeof(T); }
 		size_type 				capacity() const { return (_capacity); }
 		bool 					empty() const { return (_size == 0 ? true : false); }
+		size_type max_size() const
+		{
+			if(INT64_MAX < allocater.max_size())
+				return(INT64_MAX);
+			return(allocater.max_size());
+		}
+
 		reference     			at(size_type n)
 		{
 			if(n >= _size)
@@ -402,27 +410,27 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			_capacity = difference;
 			_size = difference;
 		}
-
-
+		//template <class U, class P>
+		//	bool operator<(const vector<U>& obj, const vector<P>& obj1) {return (obj._size < obj1._size);}
 	private :
-		T				*_data;
+		pointer 		_data;
 		allocator_type	allocater;
 		size_t			_size;
 		size_t			_capacity;
-		template <typename U>
-			friend bool operator== (const vector<U>& lhs, const vector<U>& rhs);
-			template <typename U>
-			friend bool operator!= (const vector<U>& lhs, const vector<U>& rhs);
-			template <typename U>
-			friend bool operator<  (const vector<U>& lhs, const vector<U>& rhs);
-			template <typename U>
-			friend bool operator<= (const vector<U>& lhs, const vector<U>& rhs);
-			template <typename U>
-			friend bool operator>  (const vector<U>& lhs, const vector<U>& rhs);
-			template <typename U>
-			friend bool operator>= (const vector<U>& lhs, const vector<U>& rhs);
-			template <typename U>
-			friend void swap (vector<U>& x, vector<U>& y);
+		template <typename U, class A>
+			friend bool operator== (const vector<U,A>& lhs, const vector<U,A>& rhs);
+			template <typename U, class A>
+			friend bool operator!= (const vector<U,A>& lhs, const vector<U,A>& rhs);
+			template <typename U, class A>
+			friend bool operator<  (const vector<U,A>& lhs, const vector<U,A>& rhs);
+			template <typename U, class A>
+			friend bool operator<= (const vector<U,A>& lhs, const vector<U,A>& rhs);
+			template <typename U, class A>
+			friend bool operator>  (const vector<U,A>& lhs, const vector<U, A>& rhs);
+			template <typename U, class A>
+			friend bool operator>= (const vector<U,A>& lhs, const vector<U,A>& rhs);
+			template <typename U, class A>
+			friend void swap (vector<U>& x, vector<U,A>& y);
 };
 //------------lexicographical_compare------------//
 template <class InputIterator1, class InputIterator2>
@@ -436,6 +444,7 @@ template <class InputIterator1, class InputIterator2>
         }
         return (first2!=last2);
     }
+
 // template <class InputIterator1, class InputIterator2, class Compare>
 //     bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, Compare comp)
 //     {
@@ -463,16 +472,16 @@ template <class InputIterator1, class InputIterator2, class BinaryPredicate>
         return true;
     }
 //------------Non-member function overloads------------//
-template <class T>  
-    bool operator== (const vector<T>& lhs, const vector<T>& rhs)
+template <class T, class A>  
+    bool operator== (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
     // return !(lhs < rhs) && !(rhs < lhs);
         if (lhs.capacity() != rhs.capacity())
             return(false);
         return(ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
     }
-template <class T>
-    bool operator!= (const vector<T>& lhs, const vector<T>& rhs)
+template <class T, class A>
+    bool operator!= (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
         if (lhs.size() != rhs.size())
             return(1);
@@ -480,8 +489,8 @@ template <class T>
             return(1);
         return(!(ft::equal(lhs.begin(), lhs.end(), rhs.begin())));
     }
-template <class T>  
-    bool operator< (const vector<T>& lhs, const vector<T>& rhs)
+template <class T, class A>  
+    bool operator< (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
         if (lhs.capacity() < rhs.capacity())
             return(true);
@@ -490,8 +499,8 @@ template <class T>
         else
             return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
-template <class T>  
-    bool operator<= (const vector<T>& lhs, const vector<T>& rhs)
+template <class T, class A>  
+    bool operator<= (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
 
         if (lhs.capacity() < rhs.capacity())
@@ -499,20 +508,20 @@ template <class T>
         else if (lhs.capacity() > rhs.capacity())
             return(false);
         else
-         return((lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) || (lhs == rhs));
+         return((ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) || (lhs == rhs));
     }
-template <class T>  
-    bool operator>  (const vector<T>& lhs, const vector<T>& rhs)
+template <class T, class A>
+    bool operator>  (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
 		return rhs < lhs;
     }
-template <class T>  
-    bool operator>= (const vector<T>& lhs, const vector<T>& rhs)
+template <class T, class A>  
+    bool operator>= (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
         return (rhs <= lhs);
     }
-template <class T>
-    void swap (vector<T>& x, vector<T>& y)
+template <class T, class A>
+    void swap (vector<T,A>& x, vector<T,A>& y)
     {
         x.swap(y);
     }
