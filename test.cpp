@@ -425,6 +425,7 @@ void ft_assign()
   std::cout << "size     : "<<first.size()<<std::endl;
   std::cout << "capacity : "<<first.capacity()<<std::endl;
   first.assign (20,100);   // 7 ints with a value of 100
+  first.assign(10, 30);
   std::cout << "size     : "<<first.size()<<std::endl;
   std::cout << "capacity : "<<first.capacity()<<std::endl;
 
@@ -450,6 +451,7 @@ void ft_assign()
   std::cout << "size     : "<<lawal.size()<<std::endl;
   std::cout << "capacity : "<<lawal.capacity()<<std::endl;
   lawal.assign (20,100);   // 7 ints with a value of 100
+  lawal.assign(10, 30);
   std::cout << "size     : "<<lawal.size()<<std::endl;
   std::cout << "capacity : "<<lawal.capacity()<<std::endl;
 
@@ -597,6 +599,13 @@ void ft_back()
 
 int main ()
 {
+  //std::vector <int> vec;
+
+  //vec.reserve(20);
+  //std::cout << vec.capacity()<<std::endl;
+  //std::cout << "************\n";
+  //vec.assign(10, 10);
+  //std::cout << vec.capacity()<<std::endl;
   //std::cout << "\\/////////////////// RESIZE : ////////////////////\n\n";
   //ft_resize();
   //std::cout << "\n\\////////////////// ERASE : ////////////////////\\\n\n";
@@ -615,8 +624,8 @@ int main ()
   //ft_swap();
   //std::cout << "\n\\////////////////// REV_ITERATOR : ////////////////////\\\n\n";
   //ft_rev_iterator();
-  //std::cout << "\n\\////////////////// ASSIGN : ////////////////////\\\n\n";
-  //ft_assign();
+  std::cout << "\n\\////////////////// ASSIGN : ////////////////////\\\n\n";
+  ft_assign();   // blaaaan f capacity!!!!!!
   //ft_assign_tester();
   //std::cout << "\n\\////////////////// BACK : ////////////////////\\\n\n";
   //ft_back();
@@ -624,59 +633,71 @@ int main ()
   //vec.erase(vec.begin() + 1, vec.begin() + 2);
   //std::cout << "size : "<<vec.size()<<std::endl; 
     
-    //{
-      std::vector<long> v;
+  //  {
+  //    std::vector<long> v;
 
-      v.push_back(55);
-      v.push_back(1);
-      v.push_back(1);
-      v.push_back(1);
-      v.push_back(1);
-      v.push_back(1);
-      v.push_back(1);
-      v.push_back(99);
+  //    v.push_back(55);
+  //    v.push_back(1);
+  //    v.push_back(1);
+  //    v.push_back(1);
+  //    v.push_back(1);
+  //    v.push_back(1);
+  //    v.push_back(1);
+  //    v.push_back(99);
 
 
-      std::reverse(v.rbegin(), v.rend());
+  //    std::reverse(v.rbegin(), v.rend());
 
-      std::vector<long>::iterator bg = v.begin();
-      std::vector<long>::iterator en = v.end();
-      while (bg != en)
-      {
-        std::cout << *bg << std::endl;
-        bg++;
-      }
+  //    std::vector<long>::iterator bg = v.begin();
+  //    std::vector<long>::iterator en = v.end();
+  //    while (bg != en)
+  //    {
+  //      std::cout << *bg << std::endl;
+  //      bg++;
+  //    }
       
-    //}
-    std::cout << "***************************\n";
-    //{
-        ft::vector<long> vec;
+  //  //}
+  //  std::cout << "***************************\n";
+  //  //{
+  //      ft::vector<long> vec;
 
-        vec.push_back(55);
-        vec.push_back(1);
-        vec.push_back(1);
-        vec.push_back(1);
-        vec.push_back(1);
-        vec.push_back(1);
-        vec.push_back(1);
-        vec.push_back(99);
+  //      vec.push_back(55);
+  //      vec.push_back(1);
+  //      vec.push_back(1);
+  //      vec.push_back(1);
+  //      vec.push_back(1);
+  //      vec.push_back(1);
+  //      vec.push_back(1);
+  //      vec.push_back(99);
 
 
-        std::reverse(vec.rbegin(), vec.rend());
+  //      std::reverse(vec.rbegin(), vec.rend());
 
-        ft::vector<long>::iterator bg_it = vec.begin();
-        ft::vector<long>::iterator end_it = vec.end();
-        while (bg_it != end_it)
-        {
-          std::cout << *bg_it << std::endl;
-          bg_it++;
-        }
-        if (vec < v ){
-          std::cout << "ok\n";
-        }
-    //}
+  //      ft::vector<long>::iterator bg_it = vec.begin();
+  //      ft::vector<long>::iterator end_it = vec.end();
+  //      while (bg_it != end_it)
+  //      {
+  //        std::cout << *bg_it << std::endl;
+  //        bg_it++;
+  //      }
+  //      if (vec < v ){
+  //        std::cout << "ok\n";
+  //      }
+  //  }
 
   //system("leaks a.out");
   return 0;
 }
 
+//#include <iostream>
+//#include <typeinfo>
+
+//int main() {
+//    int i = 42;
+//    std::cout << typeid(i).before() << std::endl;
+
+//    float f = 3.14f;
+//    std::cout << typeid(f).before() << std::endl;
+
+//    return 0;
+//}

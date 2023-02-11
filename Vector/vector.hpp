@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/04 23:07:35 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:11:27 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,28 +317,46 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			_size += n;
 		}
 
+		//template <class InputIterator>
+		//void insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
+		//{
+		//	size_type cords = (position) - _data;
+		//	vector vec_tmp;
+		//	while (first != last)
+		//	{
+		//		vec_tmp.push_back(*first);
+		//		first++;
+		//	}
+		//	if(_size + vec_tmp.size() > _capacity)
+		//		reserve(_capacity + vec_tmp.size());
+		//	for (size_type i = _size; i > cords; --i)
+		//	{
+		//		allocater.destroy(&_data[i - 1]);
+		//		allocater.construct(&_data[i + vec_tmp.size() -1], _data[i - 1]);
+		//	}
+		//	for (size_type i = 0; i < vec_tmp.size(); ++i)
+		//		allocater.construct(&_data[cords + i], vec_tmp[i]);
+		//	_size += vec_tmp.size();
+		//}
 		template <class InputIterator>
 		void insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
 		{
 			size_type cords = (position) - _data;
-			vector vec_tmp;
-			while (first != last)
-			{
-				vec_tmp.push_back(*first);
-				first++;
-			}
-			if(_size + vec_tmp.size() > _capacity)
-				reserve(_capacity + vec_tmp.size());
+			size_t n = last - first;
+			if(_size + n > _capacity)
+				reserve(_capacity + n);
 			for (size_type i = _size; i > cords; --i)
 			{
 				allocater.destroy(&_data[i - 1]);
-				allocater.construct(&_data[i + vec_tmp.size() -1], _data[i - 1]);
+				allocater.construct(&_data[i + n -1], _data[i - 1]);
 			}
-			for (size_type i = 0; i < vec_tmp.size(); ++i)
-				allocater.construct(&_data[cords + i], vec_tmp[i]);
-			_size += vec_tmp.size();
+			for (size_type i = 0; i < n; ++i)
+			{
+				allocater.construct(&_data[cords + i], *first);
+				first++;
+			}
+			_size += n;
 		}
-
 		///////////////////////////////////////////
 
 		void reserve (size_type n){
@@ -391,24 +409,34 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			_capacity = new_capacity;
 		}
 
+		//template <class InputIterator>
+		//void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
+		//	clear();
+		//	vector tmp;
+		//	while (first != last)
+		//	{
+		//		tmp.push_back(*first);
+		//		first++;
+		//	}
+		//	size_t difference = tmp.size();
+		//	pointer new_data = allocater.allocate(difference);
+		//	for (size_t i = 0; i < difference ; i++)
+		//		allocater.construct(new_data + i, tmp[i]);
+		//	if (_data != NULL)
+		//		allocater.deallocate(_data, _capacity);
+		//	_data = new_data;
+			
+		//	_capacity = difference;
+		//	_size = difference;
+		//}
 		template <class InputIterator>
 		void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
 			clear();
-			vector tmp;
 			while (first != last)
 			{
-				tmp.push_back(*first);
+				push_back(*first);
 				first++;
 			}
-			size_t difference = tmp.size();
-			pointer new_data = allocater.allocate(difference);
-			for (size_t i = 0; i < difference ; i++)
-				allocater.construct(new_data + i, tmp[i]);
-			if (_data != NULL)
-				allocater.deallocate(_data, _capacity);
-			_data = new_data;
-			_capacity = difference;
-			_size = difference;
 		}
 		//template <class U, class P>
 		//	bool operator<(const vector<U>& obj, const vector<P>& obj1) {return (obj._size < obj1._size);}
