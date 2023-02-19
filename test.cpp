@@ -624,8 +624,8 @@ int main ()
   //ft_swap();
   //std::cout << "\n\\////////////////// REV_ITERATOR : ////////////////////\\\n\n";
   //ft_rev_iterator();
-  std::cout << "\n\\////////////////// ASSIGN : ////////////////////\\\n\n";
-  ft_assign();   // blaaaan f capacity!!!!!!
+  //std::cout << "\n\\////////////////// ASSIGN : ////////////////////\\\n\n";
+  //ft_assign();   // blaaaan f capacity!!!!!!
   //ft_assign_tester();
   //std::cout << "\n\\////////////////// BACK : ////////////////////\\\n\n";
   //ft_back();
@@ -684,7 +684,7 @@ int main ()
   //        std::cout << "ok\n";
   //      }
   //  }
-
+  
   //system("leaks a.out");
   return 0;
 }

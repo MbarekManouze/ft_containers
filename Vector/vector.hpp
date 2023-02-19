@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/09 22:11:27 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/02/18 16:23:59 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		size_type 				size() const { return (_size); }
 		size_type 				capacity() const { return (_capacity); }
 		bool 					empty() const { return (_size == 0 ? true : false); }
+
 		size_type max_size() const
 		{
 			if(INT64_MAX < allocater.max_size())
