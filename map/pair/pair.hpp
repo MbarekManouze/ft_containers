@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:51:12 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/17 15:51:24 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:46:38 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 template <typename key, typename value>
 class pair {
 	public :
-		const key first;
+		key first;
 		value second;
 		pair(){}
 		pair(const key& f, const value& s):first(f), second(s){}
@@ -28,7 +28,7 @@ class pair {
 			{
 			}
 		pair& operator=(const pair& pr){
-				//this->first = pr.first;
+				this->first = pr.first;
 				this->second = pr.second;
 				return (*this);
 		}

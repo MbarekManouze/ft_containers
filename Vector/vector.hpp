@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/18 16:23:59 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:10:22 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,20 @@ template < class T, class Alloc = std::allocator<T> > class vector
 {
 	public :
 
-		typedef Iterator<T> 					iterator;
-		typedef Iterator<const T> 				const_iterator;
-		typedef T 								value_type;
-		typedef Alloc							allocator_type;
-		typedef T& 								reference;
-		typedef const T& 						const_reference;
-		typedef T* 								pointer;
-		typedef const T* 						const_pointer;
-		typedef typename std::ptrdiff_t 		difference_type;
-		typedef typename Alloc::size_type 		size_type; 
-		typedef T* 								Iterator;
-		typedef const T* 						const_Iterator;
-    	typedef Reverse_Iterator<const_iterator>         const_reverse_iterator;
-    	typedef Reverse_Iterator<iterator>               reverse_iterator;
+		typedef Iterator<T> 						iterator;
+		typedef Iterator<const T> 					const_iterator;
+		typedef T 									value_type;
+		typedef Alloc								allocator_type;
+		typedef T& 									reference;
+		typedef const T& 							const_reference;
+		typedef T* 									pointer;
+		typedef const T* 							const_pointer;
+		typedef typename std::ptrdiff_t 			difference_type;
+		typedef typename Alloc::size_type 			size_type; 
+		typedef T* 									Iterator;
+		typedef const T* 							const_Iterator;
+		typedef Reverse_Iterator<const_iterator>   	const_reverse_iterator;
+		typedef Reverse_Iterator<iterator>         	reverse_iterator;
 
 		explicit vector (const allocator_type& alloc = allocator_type()): _data(0),allocater(alloc),_size(0), _capacity(0){}
 		
