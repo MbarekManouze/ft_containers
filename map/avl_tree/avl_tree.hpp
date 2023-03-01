@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 16:36:24 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/21 13:37:29 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/01 23:49:54 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,75 +16,148 @@
 
 #include <iostream>
 #include "../pair/pair.hpp"
+//#include "../map_iterator/map_iterator.hpp"
 
-template <class Key, class T,  class Compare = std::less<Key>, class Alloc = std::allocator<pair<const Key, T> > >
+template <class Key, class T,  class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
 class Tree {
 	public:
 		struct Node {
 			typedef  Key key_type;
-			typedef  T	type_mapped;
-			pair<const Key, T> data;
+			typedef  T	mapped_type;
+			ft::pair<const Key, T> *data;
 			Node* parent;
 			Node* left;
 			Node* right;
 
-			Node(const pair<const Key, T>& data) : data(data), left(nullptr), right(nullptr) {}
+			Node():data(nullptr), left(nullptr), right(nullptr){}
+			Node(ft::pair<const Key, T> *data) : data(data), left(nullptr), right(nullptr) {}
 		};
 
 		typedef std::allocator<Node>  node_allocator;
 		typedef typename node_allocator::template rebind<Node>::other rebind_alloc;
 		typedef typename rebind_alloc::pointer node_pointer;
 
-		Tree() : root(nullptr), alloc() {}
+		Tree() : root(nullptr), _size(0) ,alloc(){}
 
-		node_pointer	set_previous_parent(node_pointer leaf, node_pointer previous)
+		~Tree()
 		{
-			if (previous == NULL)
-				return (NULL);
-			else{
-				leaf->parent = alloc.allocate(1);
-				alloc.construct(leaf->parent, previous->data);
-			}
-			return (nullptr);
 		}
 
-		node_pointer	insert(node_pointer &root, const pair<const Key, T>& value, node_pointer previous)
+		void DESTROY(Node* root) {
+
+			std::cout << root->data->first << std::endl;
+			if (root->left)
+			{
+				DESTROY(root->left);
+			}
+			if (root->right)
+			{
+				DESTROY(root->right);
+			}
+			if (!root->left && !root->right)
+			{
+				pair_alloc.destroy(root->data);
+				pair_alloc.deallocate(root->data, 1);
+				root->data = NULL;
+				alloc.destroy(root);
+				alloc.deallocate(root, 1);
+				root = NULL;
+			}
+			return ;
+		} 
+
+
+		size_t get_size() const { return (_size); }
+
+
+		
+
+		static ft::pair<Node*, Node*> 	smaller_root_pair(node_pointer node)
+		{
+			node_pointer rt = node;
+			if (node == NULL)
+				return (ft::pair<Node*, Node*>(nullptr, nullptr));
+			else if (node->left)
+			{
+				node = node->left;
+				while (node->left)
+					node = node->left;
+			}
+			return (ft::pair<Node*, Node*>(rt, node));
+		}
+
+		static ft::pair<Node*, Node*> large_root_pair(node_pointer node)
+		{
+			node_pointer rt = node;
+			if (node == NULL)
+				return (ft::pair<Node*, Node*>(nullptr, nullptr));
+			if (node->right)
+			{
+				node = node->right;
+				while (node->right)
+					node = node->right;
+			}
+			return (ft::pair<Node*, Node*>(rt, node));
+		}
+
+		node_pointer find_element(Key key, node_pointer root, node_pointer &node)
+		{
+			if (!root)
+				return (root);
+			if (key < root->data->first)
+				root->left = find_element(key, root->left, node);
+			else if (key > root->data->first)
+				root->right = find_element(key, root->right, node);
+			else
+			{
+				node = root;
+				return (root);
+			}
+			return (root);
+		}
+
+		node_pointer	insert(node_pointer &root, const ft::pair<const Key, T>& value, node_pointer &nd)
 		{
 			if (!root) {
 				root = alloc.allocate(1);
-				alloc.construct(root, value);
-				root->parent = NULL;
-				set_previous_parent(root, previous);
+				ft::pair<const Key, T>* pr = pair_alloc.allocate(1);
+				pair_alloc.construct(pr, ft::pair<Key, T>(value.first, value.second));
+				alloc.construct(root, pr);
+				_size++;
+				nd = root;
 				return root;
 			}
-			if (value.first < root->data.first)
+			if (value.first < root->data->first)
 			{
-				root->left = insert(root->left, value, root);
+				root->left = insert(root->left, value, nd);
 			}
-			else if (value.first > root->data.first)
+			else if (value.first > root->data->first)
 			{
-				root->right = insert(root->right, value, root);
+				root->right = insert(root->right, value, nd);
 			}
 			else
+			{
+				nd = root;
 				return (root);
+			}
 			int balance_f = Balancefactor(root);
-			if (balance_f > 1 && (value.first < root->left->data.first))
+			if (balance_f > 1 && (value.first < root->left->data->first))
 			{
 				root = Rightrotation(root);
 				return (root);
 			}
-			if (balance_f < -1 && (value.first > root->right->data.first))
+			if (balance_f < -1 && (value.first > root->right->data->first))
 			{
 				root =  Leftrotation(root);
 				return (root);
 			}
-			if (balance_f > 1 && (value.first < root->left->data.first))
+			if (balance_f > 1 && (value.first < root->left->data->first))
 			{
 				root->left = Leftrotation(root->left);
 				root =  Rightrotation(root);
 				return (root);
 			}
-			if (balance_f < -1 && (value.first < root->right->data.first))
+			if (balance_f < -1 && (value.first < root->right->data->first))
 			{
 				root->right = Rightrotation(root->right);
 				root = Leftrotation(root);
@@ -93,49 +166,140 @@ class Tree {
 			return (root);
 		}
 
-		node_pointer I_wanna_know_my_parent(Node *root, Key key)
+		static node_pointer I_wanna_know_my_parent(Node *root, Key key)
 		{
-			node_pointer tmp = root;
-			if (root->left != NULL && root->left->data.first == key)
+			if (root == NULL)
+				return (NULL);
+			node_pointer tmp = nullptr;
+			if (root->left != NULL && root->left->data->first == key)
 				return (root);
-			if (root->right != NULL && root->right->data.first == key)
+			if (root->right != NULL && root->right->data->first == key)
 				return (root);
-			if (key > root->data.first)
+			if (key > root->data->first)
 				tmp = I_wanna_know_my_parent(root->right, key);
-			if (key < root->data.first)
+			if (key < root->data->first)
 				tmp = I_wanna_know_my_parent(root->left, key);
 			return (tmp);
 		}
 
-		node_pointer DeleteNode(Node *&root, T data)
+		//node_pointer DeleteNode(Node *&root, Key data, size_t& Q)
+		//{
+		//	if (root == NULL)
+		//		return (root);
+		//	else if (data < root->data->first)
+		//		root->left = DeleteNode(root->left, data, Q);
+		//	else if (data > root->data->first)
+		//		root->right = DeleteNode(root->right, data, Q);
+		//	else
+		//	{
+		//		if (root->left == NULL)
+		//		{
+		//			node_pointer temp = root->right;
+		//			if (root)
+		//			{
+		//				Q = 1;
+		//				alloc.deallocate(root, 1);
+		//			}
+		//			root = NULL;
+		//			if (_size == 2)
+		//			//	root = temp;
+		//			this->_size--;
+		//			return (root);
+		//		}
+		//		else if (root->right == NULL)
+		//		{
+		//			node_pointer temp = root->left;
+		//			if (root)
+		//			{
+		//				Q = 1;
+		//				alloc.deallocate(root, 1);
+		//			}
+		//			root = NULL;
+		//			if (_size == 2)
+		//				root = temp;
+		//			this->_size--;
+		//			return (root);
+		//		}
+		//		else
+		//		{
+		//			node_pointer temp = minValueNode(root->right);
+		//			root->data = temp->data;
+		//			root->right = DeleteNode(root->right, temp->data->first, Q);
+		//		}
+		//	}
+		//	int balance_f = Balancefactor(root);
+		//	if ((balance_f == 2) && Balancefactor(root->left) >= 0)
+		//	{
+		//		root = Rightrotation(root);
+		//		return (root);
+		//	}
+		//	else if ((balance_f == 2) && Balancefactor(root->left) == -1)
+		//	{
+		//		root->left = Leftrotation(root->left);
+		//		root = Rightrotation(root);
+		//		return (root);
+		//	}
+		//	else if ((balance_f == -2) && Balancefactor(root->right) <= 0)
+		//	{
+		//		root = Leftrotation(root);
+		//		return (root);
+		//	}
+		//	else if ((balance_f == -2) && Balancefactor(root->right) == 1)
+		//	{
+		//		root->right = Rightrotation(root->right);
+		//		root = Leftrotation(root);
+		//		return (root);
+		//	} 
+		//	return (root);
+		//}
+
+		node_pointer DeleteNode(Node *&root, Key data, size_t &Q)
 		{
 			if (root == NULL)
 				return (root);
-			else if (data < root->data.first)
-				root->left = DeleteNode(root->left, data);
-			else if (data > root->data.first)
-				root->right = DeleteNode(root->right, data);
+			else if (data < root->data->first)
+				root->left = DeleteNode(root->left, data, Q);
+			else if (data > root->data->first)
+				root->right = DeleteNode(root->right, data, Q);
 			else
 			{
 				if (root->left == NULL)
 				{
 					node_pointer temp = root->right;
-					alloc.deallocate(root, 1);
-					//delete root;
+					if (root)
+					{
+						pair_alloc.destroy(root->data);
+						pair_alloc.deallocate(root->data, 1);
+						alloc.destroy(root);
+						alloc.deallocate(root, 1);
+						_size--;
+						Q = 1;
+					}
+					root = temp;
 					return (temp);
 				}
 				else if (root->right == NULL)
 				{
 					node_pointer temp = root->left;
-					alloc.deallocate(root, 1);
-					//delete root;
+					if (root)
+					{
+						pair_alloc.destroy(root->data);
+						pair_alloc.deallocate(root->data, 1);
+						alloc.destroy(root);
+						alloc.deallocate(root, 1);
+						_size--;
+						Q = 1;
+					}
+					root = temp;
 					return (temp);
 				}
 				else
 				{
 					node_pointer temp = minValueNode(root->right);
-					root->data = temp->data;
-					root->right = DeleteNode(root->right, temp->data.first);
+					if (root->data)
+			            pair_alloc.destroy(root->data);
+					pair_alloc.construct(root->data, ft::make_pair(temp->data->first, temp->data->second));
+					root->right = DeleteNode(root->right, temp->data->first, Q);
 				}
 			}
 			int balance_f = Balancefactor(root);
@@ -163,6 +327,7 @@ class Tree {
 			} 
 			return (root);
 		}
+
 
 		Node * minValueNode(Node * node) {
 			Node * current = node;
@@ -202,32 +367,6 @@ class Tree {
 
 			x->right = y;
 			y->left = z;
-
-			// y parent is x;
-			//std::cout << "right\n";
-			//std::cout << y->data.first << std::endl;
-			//std::cout << x->data.first << std::endl;
-			//if (z)
-			//	std::cout << z->data.first << std::endl;
-
-			if (y->left)
-			{
-				alloc.deallocate(y->left->parent, 1);
-				y->left->parent = alloc.allocate(1);
-				alloc.construct(y->left->parent, y->data);
-			}
-
-			alloc.deallocate(x->parent, 1);
-			x->parent = NULL;
-			if (y->parent != NULL)
-			{
-				x->parent = alloc.allocate(1);
-				alloc.construct(x->parent, y->data);
-			}
-			if (y->parent)
-				alloc.deallocate(y->parent, 1);
-			y->parent = alloc.allocate(1);
-			alloc.construct(y->parent, x->data);
 			
 			return(x);
 		}
@@ -239,33 +378,6 @@ class Tree {
 
 			y->left = x;
 			x->right = z;
-
-			//x parent is  y
-			//std::cout << "left\n";
-
-			//std::cout << x->data.first << std::endl;
-			//std::cout << y->data.first << std::endl;
-			//if (z)
-			//	std::cout << z->data.first << std::endl;
-
-			if (x->right)
-			{
-				alloc.deallocate(x->right->parent, 1);
-				x->right->parent = alloc.allocate(1);
-				alloc.construct(x->right->parent, x->data);
-			}
-
-			alloc.deallocate(y->parent, 1);
-			y->parent = NULL;
-			if (x->parent != NULL)
-			{
-				y->parent = alloc.allocate(1);
-				alloc.construct(y->parent, x->data);
-			}
-			if (x->parent)
-				alloc.deallocate(x->parent, 1);
-			x->parent = alloc.allocate(1);
-			alloc.construct(x->parent, y->data);
 
 			return (y);
 		}
@@ -290,20 +402,22 @@ class Tree {
 			}
 
 			showTrunks(p->prev);
-			std::cout << p->str;
+			std::cerr << p->str;
 		}
 
 		void printTree(node_pointer root, Trunk *prev, bool isLeft)
 		{
 			if (root == nullptr) {
+				//std::cerr << "hnaa\n";
 				return;
 			}
-		
+
 			std::string prev_str = "    ";
 			Trunk *trunk = new Trunk(prev, prev_str);
-		
-			printTree(root->right, trunk, true);
-		
+
+			//if (root->right != NULL)
+				printTree(root->right, trunk, true);
+
 			if (!prev) {
 				trunk->str = "———";
 			}
@@ -317,7 +431,7 @@ class Tree {
 				prev->str = prev_str;
 			}
 			showTrunks(trunk);
-			std::cout << " " << root->data.first << std::endl;
+			std::cerr << " " << root->data->first << std::endl;
 		
 			if (prev) {
 				prev->str = prev_str;
@@ -329,6 +443,8 @@ class Tree {
 
 		node_pointer root;
 	private:
+		size_t 			_size;
+		Alloc 			pair_alloc;
 		rebind_alloc	alloc;
 		node_pointer	previous_node;
 };

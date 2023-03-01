@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 15:23:29 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/04 18:28:40 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/02/28 01:57:44 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ template <class T> class Reverse_Iterator
                 typedef typename    iterator_traits<T>::difference_type          difference_type;
                 typedef typename    iterator_traits<T>::pointer                  pointer;
                 typedef typename    iterator_traits<T>::reference                reference;
-                Reverse_Iterator():reverse_iterator_data() {}
+                Reverse_Iterator():reverse_iterator_data() {std::cout << "hah88aha\n";}
                 ~Reverse_Iterator() {}
-                explicit Reverse_Iterator( underlynig_iterator object):reverse_iterator_data(object){}
+                explicit Reverse_Iterator( underlynig_iterator object):reverse_iterator_data(object){std::cout << "hah66aha\n";}
                 template <class iter>
-                Reverse_Iterator(const Reverse_Iterator<iter>& object):reverse_iterator_data(object.base()){}
+                Reverse_Iterator(const Reverse_Iterator<iter>& object):reverse_iterator_data(object.base()){std::cout << "haha55ha\n";}
                 underlynig_iterator base() const {return (reverse_iterator_data);}
                 reference operator*() const {underlynig_iterator tmp = reverse_iterator_data; return (*(--tmp));}
                 Reverse_Iterator operator+(difference_type n) const {return Reverse_Iterator(reverse_iterator_data - n);}////////////
-                operator Iterator<const value_type>() const {return (Iterator<const value_type>(reverse_iterator_data));}
+                //operator Iterator<const value_type>() const {return (Iterator<const value_type>(reverse_iterator_data));}
                 Reverse_Iterator operator-(difference_type n) const {return Reverse_Iterator(reverse_iterator_data + n);}////////////
                 Reverse_Iterator& operator++() {--(reverse_iterator_data); return (*this);}
                 Reverse_Iterator operator++(int) {Reverse_Iterator tmp = *this;--(reverse_iterator_data); return (tmp);}

@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 15:51:12 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/21 14:46:38 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/01 11:05:58 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 
 #include <iostream>
 
-
+namespace ft{
 template <typename key, typename value>
 class pair {
 	public :
 		key first;
 		value second;
-		pair(){}
+		pair():first(){}
 		pair(const key& f, const value& s):first(f), second(s){}
 		template<class U, class V>
 			pair (const pair<U,V>& pr):first(pr.first), second(pr.second)
@@ -65,6 +65,6 @@ template <class T1, class T2>
   bool operator>= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
 { return !(lhs<rhs); }
 
-
+}
 
 #endif
