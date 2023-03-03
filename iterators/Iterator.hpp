@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 09:23:41 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/28 02:01:31 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:29:52 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ template <class T> class Iterator
         typedef typename iterator_traits<T*>::iterator_category iterator_category;
 
 		Iterator():_iterator_data(NULL) {}
-		Iterator(pointer data):_iterator_data(data) {std::cout << "hah000aha\n";}
-        Iterator(const Iterator &object):_iterator_data(object._iterator_data) {std::cout<<"leilaaa\n";}
+		Iterator(pointer data):_iterator_data(data) {}
+        Iterator(const Iterator &object):_iterator_data(object._iterator_data) {}
         operator Iterator<const value_type>() const {return Iterator<const value_type>(_iterator_data);}
         operator Iterator<const value_type>() {return Iterator<const value_type>(_iterator_data);}
         Iterator& operator=(Iterator const &object) { this->_iterator_data = object._iterator_data; return (*this); }		

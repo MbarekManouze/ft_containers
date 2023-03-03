@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/01 21:16:13 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 00:50:19 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@
 #include <memory>
 #include "../iterators/Iterator.hpp"
 #include "../iterators/reverse_Iterator.hpp"
+#include "../iterators/Iterator_traits.hpp"
+#include "enable_if.hpp"
+#include <typeinfo>
+#include <iostream>
+#include <sstream>
+#include <iterator>
+#include <type_traits>
 
 namespace ft {
 template < class T, class Alloc = std::allocator<T> > class vector
@@ -34,8 +41,8 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		typedef const T* 							const_pointer;
 		typedef typename std::ptrdiff_t 			difference_type;
 		typedef typename Alloc::size_type 			size_type; 
-		typedef T* 									Iterator;
-		typedef const T* 							const_Iterator;
+		//typedef T* 									Iterator;
+		//typedef const T* 							const_Iterator;
 		typedef Reverse_Iterator<const_iterator>   	const_reverse_iterator;
 		typedef Reverse_Iterator<iterator>         	reverse_iterator;
 
@@ -63,7 +70,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		}
 
 		template <class InputIterator>
-		vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
+		vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
 		:_data(0),allocater(alloc),_size(0),_capacity(0)
 		{
 			assign(first, last);
@@ -78,10 +85,10 @@ template < class T, class Alloc = std::allocator<T> > class vector
 
 		iterator 				begin() { return (iterator (_data)); }
 		iterator 				end() { return (iterator (_data + _size)); }
-		const_Iterator 			begin() const {return (const_Iterator(_data));}
-		const_Iterator 			end() const { return (const_Iterator (_data + _size)); }
-		reverse_iterator 				rbegin() { /*std::cout <<"rebegiin : "<< *(_data + _size-1) <<std::endl;*/return (reverse_iterator (_data + _size)); }
-		reverse_iterator 				rend() { /*std::cout <<"reend : "<< *(_data) <<std::endl;*/return (reverse_iterator (_data)); }
+		const_iterator 			begin() const {return (const_iterator(_data));}
+		const_iterator 			end() const { return (const_iterator (_data + _size)); }
+		reverse_iterator 				rbegin() { return (reverse_iterator (_data + _size)); }
+		reverse_iterator 				rend() { return (reverse_iterator (_data)); }
 		const_reverse_iterator  rbegin() const {return const_reverse_iterator(_data + _size);}
 		const_reverse_iterator  rend() const {return const_reverse_iterator(_data);}
 		size_type 				size() const { return (_size); }
@@ -172,7 +179,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			}
 		}
 
-		void 			resize (size_type n, const T& value){
+		void 	resize (size_type n, const T& value){
 			if (n > this->size()){
 				size_t new_capacity;
 				if (n > _capacity)
@@ -306,7 +313,10 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			{
 				if (_capacity + n > max_size())
 					throw std::length_error("insert: position is out of range");
-				reserve(_capacity + n);
+				if (_size + n > _capacity * 2)
+					reserve(_size + n);
+				else
+					reserve(_capacity * 2);
 			}
 			for (size_type i = _size; i > cords; i--)
 			{
@@ -318,29 +328,32 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			_size += n;
 		}
 
-		//template <class InputIterator>
-		//void insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
-		//{
-		//	size_type cords = (position) - _data;
-		//	vector vec_tmp;
-		//	while (first != last)
-		//	{
-		//		vec_tmp.push_back(*first);
-		//		first++;
-		//	}
-		//	if(_size + vec_tmp.size() > _capacity)
-		//		reserve(_capacity + vec_tmp.size());
-		//	for (size_type i = _size; i > cords; --i)
-		//	{
-		//		allocater.destroy(&_data[i - 1]);
-		//		allocater.construct(&_data[i + vec_tmp.size() -1], _data[i - 1]);
-		//	}
-		//	for (size_type i = 0; i < vec_tmp.size(); ++i)
-		//		allocater.construct(&_data[cords + i], vec_tmp[i]);
-		//	_size += vec_tmp.size();
-		//}
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
+		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
+		{
+			//std::cerr << !std::is_same<typename std::iterator_traits<int>::iterator_category, std::random_access_iterator_tag>::value <<std::endl;
+			size_type cords = (position) - _data;
+			vector vec_tmp;
+			while (first != last)
+			{
+				vec_tmp.push_back(*first);
+				first++;
+			}
+			//size_type cords = vec_tmp.size();
+			if(_size + vec_tmp.size() > _capacity)
+				reserve(_capacity + vec_tmp.size());
+			for (size_type i = _size; i > cords; --i)
+			{
+				allocater.destroy(&_data[i - 1]);
+				allocater.construct(&_data[i + vec_tmp.size() -1], _data[i - 1]);
+			}
+			for (size_type i = 0; i < vec_tmp.size(); ++i)
+				allocater.construct(&_data[cords + i], vec_tmp[i]);
+			_size += vec_tmp.size();
+		}
+
+		template <class InputIterator>
+		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
 		{
 			size_type cords = (position) - _data;
 			size_t n = last - first;
@@ -397,50 +410,64 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		//////////////////////////////////////////
 
 		void assign (size_type n, const value_type& val){
-			size_t new_capacity = n;
 			clear();
-			pointer new_data;
-			new_data = allocater.allocate(new_capacity);
-			for (size_t i = 0; i < n; i++)
-				allocater.construct(new_data + i, val);
-			if (_data != NULL)
-				allocater.deallocate(_data, _capacity);
-			_data = new_data;
-			_size = n;
-			_capacity = new_capacity;
-		}
-
-		//template <class InputIterator>
-		//void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
-		//	clear();
-		//	vector tmp;
-		//	while (first != last)
-		//	{
-		//		tmp.push_back(*first);
-		//		first++;
-		//	}
-		//	size_t difference = tmp.size();
-		//	pointer new_data = allocater.allocate(difference);
-		//	for (size_t i = 0; i < difference ; i++)
-		//		allocater.construct(new_data + i, tmp[i]);
-		//	if (_data != NULL)
-		//		allocater.deallocate(_data, _capacity);
-		//	_data = new_data;
-			
-		//	_capacity = difference;
-		//	_size = difference;
-		//}
-		template <class InputIterator>
-		void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type* = nullptr){
-			clear();
-			while (first != last)
+			if (n > _capacity)
 			{
-				push_back(*first);
-				first++;
+				size_t new_capacity = n;
+				pointer new_data;
+				new_data = allocater.allocate(new_capacity);
+				for (size_t i = 0; i < n; i++)
+					allocater.construct(new_data + i, val);
+				if (_data != NULL)
+					allocater.deallocate(_data, _capacity);
+				_data = new_data;
+				_size = n;
+				_capacity = new_capacity;
+			}
+			else
+			{
+				for (size_t i = 0; i < n; i++)
+					allocater.construct(_data + i, val);
+				_size = n;
 			}
 		}
-		//template <class U, class P>
-		//	bool operator<(const vector<U>& obj, const vector<P>& obj1) {return (obj._size < obj1._size);}
+
+		template <class InputIterator>
+  		void assign (InputIterator first, InputIterator last,typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
+		{
+			clear();
+        	vector tmp;
+        	while (first != last)
+        	{
+        	    tmp.push_back(*first);
+        	    first++;
+        	}
+        	size_t difference = tmp.size();
+        	pointer new_data = allocater.allocate(difference);
+        	for (size_t i = 0; i < difference ; i++)
+        	    allocater.construct(new_data + i, tmp[i]);
+        	if (_data != NULL)
+        	    allocater.deallocate(_data, _capacity);
+        	_data = new_data;
+        	_capacity = difference;
+        	_size = difference;
+		}
+		template <class InputIterator>
+  			void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr){
+			clear();
+        	size_t difference = last - first;
+        	pointer new_data = allocater.allocate(difference);
+        	for (size_t i = 0; i < difference ; i++)
+			{
+        	    allocater.construct(new_data + i, *first);
+				first++;
+			}
+        	if (_data != NULL)
+        	    allocater.deallocate(_data, _capacity);
+        	_data = new_data;
+        	_capacity = difference;
+        	_size = difference;
+		}
 	private :
 		pointer 		_data;
 		allocator_type	allocater;
@@ -477,20 +504,15 @@ template <class InputIterator1, class InputIterator2>
         return (first2 != last2);
     }
 
-// template <class InputIterator1, class InputIterator2, class Compare>
-//     bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, Compare comp)
-//     {
-        
-//     }
 //------------equal------------//
 template <class InputIterator1, class InputIterator2>
     bool equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
     {
         while (first1!=last1) {
-        if (!(*first1 == *first2))   // or: if (!pred(*first1,*first2)), for version 2
+        if (!(*first1 == *first2)) 
           return false;
         ++first1; ++first2;
-  }
+  	}
         return true;
     }
 template <class InputIterator1, class InputIterator2, class BinaryPredicate>
@@ -507,7 +529,6 @@ template <class InputIterator1, class InputIterator2, class BinaryPredicate>
 template <class T, class A>  
     bool operator== (const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
-    // return !(lhs < rhs) && !(rhs < lhs);
         if (lhs.capacity() != rhs.capacity())
             return(false);
         return(ft::equal(lhs.begin(), lhs.end(), rhs.begin()));

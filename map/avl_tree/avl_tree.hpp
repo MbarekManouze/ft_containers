@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 16:36:24 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/01 23:49:54 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/02 22:37:31 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@
 #include "../pair/pair.hpp"
 //#include "../map_iterator/map_iterator.hpp"
 
-template <class Key, class T,  class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
+template <class Key, class T,  class Compare, class Alloc = std::allocator<ft::pair<const Key, T> > >
 class Tree {
 	public:
 		struct Node {
-			typedef  Key key_type;
-			typedef  T	mapped_type;
+			typedef	Key			key_type;
+			typedef	T			mapped_type;
+			typedef	Compare		cmp;
 			ft::pair<const Key, T> *data;
 			Node* parent;
 			Node* left;
@@ -102,11 +103,12 @@ class Tree {
 
 		node_pointer find_element(Key key, node_pointer root, node_pointer &node)
 		{
+			Compare cmp;
 			if (!root)
 				return (root);
-			if (key < root->data->first)
+			if (cmp(key , root->data->first))
 				root->left = find_element(key, root->left, node);
-			else if (key > root->data->first)
+			else if (cmp(root->data->first, key))
 				root->right = find_element(key, root->right, node);
 			else
 			{
@@ -118,6 +120,8 @@ class Tree {
 
 		node_pointer	insert(node_pointer &root, const ft::pair<const Key, T>& value, node_pointer &nd)
 		{
+			Compare cmp;
+			//std::cerr << value.first << std::endl;
 			if (!root) {
 				root = alloc.allocate(1);
 				ft::pair<const Key, T>* pr = pair_alloc.allocate(1);
@@ -127,11 +131,11 @@ class Tree {
 				nd = root;
 				return root;
 			}
-			if (value.first < root->data->first)
+			if (cmp(value.first , root->data->first))
 			{
 				root->left = insert(root->left, value, nd);
 			}
-			else if (value.first > root->data->first)
+			else if (cmp(root->data->first, value.first))
 			{
 				root->right = insert(root->right, value, nd);
 			}
@@ -141,23 +145,23 @@ class Tree {
 				return (root);
 			}
 			int balance_f = Balancefactor(root);
-			if (balance_f > 1 && (value.first < root->left->data->first))
+			if (balance_f > 1 && (cmp(value.first, root->left->data->first)))
 			{
 				root = Rightrotation(root);
 				return (root);
 			}
-			if (balance_f < -1 && (value.first > root->right->data->first))
+			if (balance_f < -1 && (cmp(root->right->data->first, value.first)))
 			{
 				root =  Leftrotation(root);
 				return (root);
 			}
-			if (balance_f > 1 && (value.first < root->left->data->first))
+			if (balance_f > 1 && (cmp(value.first, root->left->data->first)))
 			{
 				root->left = Leftrotation(root->left);
 				root =  Rightrotation(root);
 				return (root);
 			}
-			if (balance_f < -1 && (value.first < root->right->data->first))
+			if (balance_f < -1 && (cmp(root->right->data->first, value.first)))
 			{
 				root->right = Rightrotation(root->right);
 				root = Leftrotation(root);
@@ -168,6 +172,7 @@ class Tree {
 
 		static node_pointer I_wanna_know_my_parent(Node *root, Key key)
 		{
+			Compare cmp;
 			if (root == NULL)
 				return (NULL);
 			node_pointer tmp = nullptr;
@@ -175,9 +180,9 @@ class Tree {
 				return (root);
 			if (root->right != NULL && root->right->data->first == key)
 				return (root);
-			if (key > root->data->first)
+			if (cmp(root->data->first, key ))
 				tmp = I_wanna_know_my_parent(root->right, key);
-			if (key < root->data->first)
+			if (cmp(key , root->data->first))
 				tmp = I_wanna_know_my_parent(root->left, key);
 			return (tmp);
 		}
@@ -255,11 +260,12 @@ class Tree {
 
 		node_pointer DeleteNode(Node *&root, Key data, size_t &Q)
 		{
+			Compare cmp;
 			if (root == NULL)
 				return (root);
-			else if (data < root->data->first)
+			else if (cmp(data , root->data->first))
 				root->left = DeleteNode(root->left, data, Q);
-			else if (data > root->data->first)
+			else if (cmp(root->data->first, data))
 				root->right = DeleteNode(root->right, data, Q);
 			else
 			{

@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:20:56 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/01 23:50:00 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/02 22:35:16 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,26 @@ namespace ft{
 template < class Key, class T, class Compare = std::less<Key>,  class Alloc = std::allocator<std::pair<const Key,T> > >
 class map{
 	public :
-		typedef  	Key																	key_type;
-		typedef 	T																	mapped_type;							
-		typedef 	pair<const key_type,mapped_type>									value_type; 
-		typedef 	Compare																key_compare;
-		typedef 	typename Alloc::size_type											size_type;	
-		typedef 	Alloc																allocator_type;							
-		typedef 	value_type&			 												reference;		
-		typedef 	const value_type&													const_reference;
-		typedef 	value_type*															pointer;
-		typedef 	const value_type*													const_pointer;
-		typedef 	Map_Iterator<typename Tree<key_type, mapped_type>::Node> 			iterator;
-		typedef 	Map_Iterator<typename Tree<key_type, mapped_type>::Node> 			const_iterator;
-		typedef 	reverse_iterator<const_iterator> 									const_reverse_iterator;
-		typedef 	reverse_iterator<iterator> 											reverse_iterator;
-	    typedef typename std::ptrdiff_t                                            		difference_type;
-		typedef typename Tree<key_type, mapped_type>::Node nd;
+		typedef  	Key																						key_type;
+		typedef 	T																						mapped_type;							
+		typedef 	pair<const key_type,mapped_type>														value_type; 
+		typedef 	Compare																					key_compare;
+		typedef 	typename Alloc::size_type																size_type;	
+		typedef 	Alloc																					allocator_type;							
+		typedef 	value_type&			 																	reference;		
+		typedef 	const value_type&																		const_reference;
+		typedef 	value_type*																				pointer;
+		typedef 	const value_type*																		const_pointer;
+		typedef 	Map_Iterator<typename Tree<key_type, mapped_type, key_compare>::Node> 					iterator;
+		typedef 	Map_Iterator<typename Tree<key_type, mapped_type, key_compare>::Node> 					const_iterator;
+		typedef 	reverse_iterator<const_iterator> 														const_reverse_iterator;
+		typedef 	reverse_iterator<iterator> 																reverse_iterator;
+	    typedef typename std::ptrdiff_t                                            							difference_type;
+		typedef typename Tree<key_type, mapped_type, key_compare>::Node 									nd;
+		typedef std::allocator<Tree<key_type, mapped_type, key_compare> > 									tree_allocator;
+		typedef typename tree_allocator::template rebind<Tree<key_type, mapped_type, key_compare> >::other 	tree_bind;
+		typedef typename tree_bind::pointer 																node_pointer;
 
-		typedef std::allocator<Tree<key_type, mapped_type> > tree_allocator;
-		typedef typename tree_allocator::template rebind<Tree<key_type, mapped_type> >::other tree_bind;
-		typedef typename tree_bind::pointer node_pointer;
 		class value_compare {
    		private:
    		  Compare comp;
@@ -56,10 +56,11 @@ class map{
    		    return comp(x.first, y.first);
    		  }
    		};
+
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):root(nullptr), _alloc(alloc), Comp(comp), _size(0)
 		{
 			root = tree_alloc.allocate(1);
-			tree_alloc.construct(root, Tree<key_type, mapped_type>());
+			tree_alloc.construct(root, Tree<key_type, mapped_type, key_compare>());
 		}
 
 		template <class InputIterator>
@@ -67,7 +68,7 @@ class map{
 		{
 			nd* node = NULL;
 			root = tree_alloc.allocate(1);
-			tree_alloc.construct(root, Tree<key_type, mapped_type>());
+			tree_alloc.construct(root, Tree<key_type, mapped_type, key_compare>());
 			while (first != last)
 			{
 				root->insert(root->root, *first , node);
@@ -116,7 +117,7 @@ class map{
 			{
 				//std::cerr << "okeey\n";
 				root = tree_alloc.allocate(1);
-				tree_alloc.construct(root, Tree<key_type, mapped_type>());
+				tree_alloc.construct(root, Tree<key_type, mapped_type, key_compare>());
 				insert(object.begin(), object.end());
 			}
 			else
@@ -124,7 +125,7 @@ class map{
 				erase(begin(), end());
 				tree_alloc.deallocate(root, 1);
 				root = tree_alloc.allocate(1);
-				tree_alloc.construct(root, Tree<key_type, mapped_type>());
+				tree_alloc.construct(root, Tree<key_type, mapped_type, key_compare>());
 				insert(object.begin(), object.end());
 			}
 			return (*this);
@@ -148,7 +149,6 @@ class map{
 		{
 			while (first != last)
 			{
-
 				insert(*first);
 				first++;
 			}

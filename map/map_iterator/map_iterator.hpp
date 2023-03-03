@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 14:53:31 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/01 23:50:14 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:13:27 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ class Map_Iterator {
 					tree_branche = tree_branche->left;
 			}
 			}else{
-				Node *parent = Tree<typename Node::key_type, typename Node::mapped_type>::I_wanna_know_my_parent(root, tree_branche->data->first);
+				Node *parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, tree_branche->data->first);
 								//std::cerr << "hehehe\n";
 				if (parent == nullptr)
 				{
@@ -103,7 +103,7 @@ class Map_Iterator {
 				while (parent && tree_branche == parent->right)
 				{
 					tree_branche = parent;
-					parent = Tree<typename Node::key_type, typename Node::mapped_type>::I_wanna_know_my_parent(root, parent->data->first);
+					parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, parent->data->first);
 				}
 				tree_branche =parent;
 			}
@@ -121,7 +121,7 @@ class Map_Iterator {
 		{
 			if (tree_branche == nullptr)
 			{
-				tree_branche = Tree<typename Node::key_type, typename Node::mapped_type>::large_root_pair(root).second;
+				tree_branche = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::large_root_pair(root).second;
 				return (*this);
 			}
 			if (tree_branche->left) {
@@ -131,10 +131,10 @@ class Map_Iterator {
 				}
 			}
 			else {
-				node parent = Tree<typename Node::key_type, typename Node::mapped_type>::I_wanna_know_my_parent(root, tree_branche->data->first);
+				node parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, tree_branche->data->first);
 				while (parent && tree_branche == parent->left) {
 					tree_branche = parent;
-					parent = Tree<typename Node::key_type, typename Node::mapped_type>::I_wanna_know_my_parent(root, parent->data->first);;
+					parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, parent->data->first);;
 				}
 				tree_branche = parent;
 			}

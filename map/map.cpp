@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 14:56:22 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/01 20:29:28 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/02 23:09:10 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,24 @@ void ft_test()
 	//	ite--;
 	//}
 }
+#include <chrono>
 
 int main()
 {
-	ft_test();
+	//ft_test();
+  	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
-	system("leaks a.out");
+    std::map<int, int> data;
+
+	for (std::size_t i = 0; i < 2147483647 / 2; ++i) {
+        data.insert(std::make_pair(rand(), rand()));
+    }  	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+  	
+	std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  	std::cout << "Insertion time: " << duration.count() << "ms" << std::endl;
+
+
+	//system("leaks a.out");
 
 	return (0);
 }
