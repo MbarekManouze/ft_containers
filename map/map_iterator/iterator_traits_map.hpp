@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 12:13:51 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/02/25 12:17:30 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 19:08:00 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ class iterator_traits_map<T*>
         typedef std::bidirectional_iterator_tag iterator_category;
 };
 
-template <class T>
-class iterator_traits_map<const T*>
-{
-  public:
-        typedef std::ptrdiff_t                  difference_type;
-        typedef T                               value_type;
-        typedef const T*                        pointer;
-        typedef const T&                        reference;
-        typedef std::bidirectional_iterator_tag iterator_category;
-};
+//template <class T>
+//class iterator_traits_map<const T*>
+//{
+//  public:
+//        typedef std::ptrdiff_t                  difference_type;
+//        typedef T                               value_type;
+//        typedef const T*                        pointer;
+//        typedef const T&                        reference;
+//        typedef std::bidirectional_iterator_tag iterator_category;
+//};
 
 
 

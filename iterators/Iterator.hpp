@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 09:23:41 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/02 11:29:52 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 19:09:57 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,7 @@
 template <class T> class Iterator
 {
 	public :
-         typedef typename  iterator_traits<T*>::value_type         value_type;
-        //typedef T value_type;
-        //typedef T& reference;
-        //typedef T* pointer;
-        //typedef std::ptrdiff_t difference_type;
-        //typedef std::random_access_iterator_tag iterator_category;
+        typedef typename  iterator_traits<T*>::value_type         value_type;
         typedef typename iterator_traits<T*>::reference reference;
         typedef typename iterator_traits<T*>::pointer pointer;
         typedef typename iterator_traits<T*>::difference_type difference_type;

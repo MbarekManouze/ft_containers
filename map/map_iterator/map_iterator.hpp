@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 14:53:31 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/02 11:13:27 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 19:09:37 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@
 template <class Node>
 class Map_Iterator {
 	public :
-		//typedef ft::pair< const typename Node::key_type,  typename Node::mapped_type>			value_type;
-		//typedef std::bidirectional_iterator_tag 												iterator_category;
-		//typedef std::ptrdiff_t 																	diffrence_type;
-		//typedef value_type* 																	pointer;
-		//typedef value_type&																		reference;
         typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::value_type         							value_type;
         typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::difference_type    							difference_type;
         typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::pointer            							pointer;

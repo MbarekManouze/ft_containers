@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 14:56:22 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/02 23:09:10 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 10:47:03 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,23 @@ int main()
 
     std::map<int, int> data;
 
-	for (std::size_t i = 0; i < 2147483647 / 2; ++i) {
+	for (std::size_t i = 0; i < 4000 / 2; ++i) {
         data.insert(std::make_pair(rand(), rand()));
     }  	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
-  	
+
 	std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-  	std::cout << "Insertion time: " << duration.count() << "ms" << std::endl;
+  	std::cout << "std::map Insertion time: " << duration.count() << "ms" << std::endl;
+
+  	std::chrono::high_resolution_clock::time_point begin = std::chrono::high_resolution_clock::now();
+    ft::map<int, int> d;
+
+	for (std::size_t i = 0; i < 4000 / 2; ++i) {
+        d.insert(ft::make_pair(rand(), rand()));
+    }  	std::chrono::high_resolution_clock::time_point finish = std::chrono::high_resolution_clock::now();
+
+	std::chrono::milliseconds time = std::chrono::duration_cast<std::chrono::milliseconds>(finish - begin);
+  	std::cout << "ft::map Insertion time: " << time.count() << "ms" << std::endl;
+
 
 
 	//system("leaks a.out");

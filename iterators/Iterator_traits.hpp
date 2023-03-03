@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 15:34:36 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/02 15:56:38 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 18:42:51 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 #include<iostream>
 #include"Iterator.hpp"
 
-//template<>
-//class iterator_traits<int> {
-  
-//}
 
 template<class Iterator>
 class iterator_traits{

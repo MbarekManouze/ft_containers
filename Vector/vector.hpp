@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 15:52:11 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/03 00:50:19 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 18:42:39 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,7 +331,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		template <class InputIterator>
 		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
 		{
-			//std::cerr << !std::is_same<typename std::iterator_traits<int>::iterator_category, std::random_access_iterator_tag>::value <<std::endl;
 			size_type cords = (position) - _data;
 			vector vec_tmp;
 			while (first != last)

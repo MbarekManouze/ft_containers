@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 16:36:24 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/02 22:37:31 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/03 19:12:09 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ class Tree {
 			Node(ft::pair<const Key, T> *data) : data(data), left(nullptr), right(nullptr) {}
 		};
 
-		typedef std::allocator<Node>  node_allocator;
-		typedef typename node_allocator::template rebind<Node>::other rebind_alloc;
+		typedef typename Alloc::template rebind<Node>::other rebind_alloc;
 		typedef typename rebind_alloc::pointer node_pointer;
 
 		Tree() : root(nullptr), _size(0) ,alloc(){}
