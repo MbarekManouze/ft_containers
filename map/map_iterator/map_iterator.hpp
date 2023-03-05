@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 14:53:31 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/03 19:09:37 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/05 13:33:23 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,21 @@
 template <class Node>
 class Map_Iterator {
 	public :
-        typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::value_type         							value_type;
-        typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::difference_type    							difference_type;
-        typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::pointer            							pointer;
-        typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::reference          							reference;
-        typedef typename  iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::iterator_category  							iterator_category;
+
+
+		//-------------------member types---------------------------//
+
+
+        typedef typename  ft::iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::value_type         							value_type;
+        typedef typename  ft::iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::difference_type    							difference_type;
+        typedef typename  ft::iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::pointer            							pointer;
+        typedef typename  ft::iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::reference          							reference;
+        typedef typename  ft::iterator_traits_map<ft::pair< const typename Node::key_type,  typename Node::mapped_type>*>::iterator_category  							iterator_category;
 		typedef Node* 																			node;
+
+
+		//---------------------constructors-------------------------//
+
 
 		Map_Iterator(){}
 		Map_Iterator(node node): tree_branche(node){}
@@ -40,46 +49,21 @@ class Map_Iterator {
 			root = pr.first;
 			tree_branche = pr.second;
 		}
+
+		//-----------------------operators-------------------------//
+
+
 		Map_Iterator& operator=(const Map_Iterator& obj)
 		{
 			tree_branche = obj.tree_branche;
 			root = obj.root;
 			return (*this);
 		}
-		//operator Map_Iterator<const Node>() const {return Map_Iterator<const Node>(tree_branche);}
-        //operator Map_Iterator<const Node>() {return Map_Iterator<const Node>(tree_branche);}
-		pointer operator->()  { return(tree_branche->data); }
-		reference operator*() const { return(*tree_branche->data); }
-		bool operator!=(const Map_Iterator& other) const
-		{ 
-			//if (tree_branche == NULL && other.tree_branche == NULL)
-			//	return (false);
-			//std::cerr << tree_branche << " ******* " << other.tree_branche << std::endl;
-			return (tree_branche != other.tree_branche);
-		}
-		bool operator==(const Map_Iterator& other) const 
-		{
-			return (tree_branche == other.tree_branche);
-		}
-
-		//Map_Iterator& operator++()
-		//{
-		//	if (tree_branche->right) {
-		//		tree_branche = tree_branche->right;
-		//		while (tree_branche->left) {
-		//			tree_branche = tree_branche->left;
-		//		}
-		//	}
-		//	else {
-		//		node parent = Tree<typename Node::key_type, typename Node::mapped_type>::I_wanna_know_my_parent(root, tree_branche->data->first);
-		//		while (parent && tree_branche == parent->right) {
-		//			tree_branche = parent;
-		//			parent = Tree<typename Node::key_type, typename Node::mapped_type>::I_wanna_know_my_parent(root, parent->data->first);;
-		//		}
-		//		tree_branche = parent;
-		//	}
-		//	return *this;
-		//}
+		reference 		operator*() const { return(*tree_branche->data); }
+		pointer 		operator->() const { return(tree_branche->data); }
+		bool 			operator!=(const Map_Iterator& other) const { return (tree_branche != other.tree_branche); }
+		bool 			operator==(const Map_Iterator& other) const { return (tree_branche == other.tree_branche); }
+		node 			get_tree_branche() const { return (tree_branche); }
 
 		Map_Iterator& operator++()
 		{
@@ -87,10 +71,9 @@ class Map_Iterator {
 				tree_branche = tree_branche->right;
 				while(tree_branche->left){
 					tree_branche = tree_branche->left;
-			}
+				}
 			}else{
 				Node *parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, tree_branche->data->first);
-								//std::cerr << "hehehe\n";
 				if (parent == nullptr)
 				{
 					tree_branche = root; 
@@ -143,12 +126,7 @@ class Map_Iterator {
 			return (tmp);
 		}
 
-		node get_tree_branche() const
-		{
-			return (tree_branche);
-		}
 	private :
-		//Tree<typename Node::key_type, typename Node::mapped_type> suiii;
 		node	tree_branche;
 		node 	root;
 };

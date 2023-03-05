@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 16:36:24 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/03 19:12:09 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/05 16:40:30 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ class Tree {
 			Node* parent;
 			Node* left;
 			Node* right;
+			size_t height;
 
-			Node():data(nullptr), left(nullptr), right(nullptr){}
-			Node(ft::pair<const Key, T> *data) : data(data), left(nullptr), right(nullptr) {}
+			Node():data(nullptr), left(nullptr), right(nullptr), height(0){}
+			Node(ft::pair<const Key, T> *data) : data(data), left(nullptr), right(nullptr) ,height(0){}
 		};
 
 		typedef typename Alloc::template rebind<Node>::other rebind_alloc;
@@ -43,34 +44,7 @@ class Tree {
 		{
 		}
 
-		void DESTROY(Node* root) {
-
-			std::cout << root->data->first << std::endl;
-			if (root->left)
-			{
-				DESTROY(root->left);
-			}
-			if (root->right)
-			{
-				DESTROY(root->right);
-			}
-			if (!root->left && !root->right)
-			{
-				pair_alloc.destroy(root->data);
-				pair_alloc.deallocate(root->data, 1);
-				root->data = NULL;
-				alloc.destroy(root);
-				alloc.deallocate(root, 1);
-				root = NULL;
-			}
-			return ;
-		} 
-
-
 		size_t get_size() const { return (_size); }
-
-
-		
 
 		static ft::pair<Node*, Node*> 	smaller_root_pair(node_pointer node)
 		{
@@ -120,7 +94,7 @@ class Tree {
 		node_pointer	insert(node_pointer &root, const ft::pair<const Key, T>& value, node_pointer &nd)
 		{
 			Compare cmp;
-			//std::cerr << value.first << std::endl;
+
 			if (!root) {
 				root = alloc.allocate(1);
 				ft::pair<const Key, T>* pr = pair_alloc.allocate(1);
@@ -143,6 +117,12 @@ class Tree {
 				nd = root;
 				return (root);
 			}
+			if (height(root->left) > height(root->right))
+				root->height = height(root->left) + 1;
+			else if (height(root->left) < height(root->right))
+				root->height = height(root->right) + 1;
+			else
+				root->height = height(root->left) + 1;
 			int balance_f = Balancefactor(root);
 			if (balance_f > 1 && (cmp(value.first, root->left->data->first)))
 			{
@@ -185,77 +165,6 @@ class Tree {
 				tmp = I_wanna_know_my_parent(root->left, key);
 			return (tmp);
 		}
-
-		//node_pointer DeleteNode(Node *&root, Key data, size_t& Q)
-		//{
-		//	if (root == NULL)
-		//		return (root);
-		//	else if (data < root->data->first)
-		//		root->left = DeleteNode(root->left, data, Q);
-		//	else if (data > root->data->first)
-		//		root->right = DeleteNode(root->right, data, Q);
-		//	else
-		//	{
-		//		if (root->left == NULL)
-		//		{
-		//			node_pointer temp = root->right;
-		//			if (root)
-		//			{
-		//				Q = 1;
-		//				alloc.deallocate(root, 1);
-		//			}
-		//			root = NULL;
-		//			if (_size == 2)
-		//			//	root = temp;
-		//			this->_size--;
-		//			return (root);
-		//		}
-		//		else if (root->right == NULL)
-		//		{
-		//			node_pointer temp = root->left;
-		//			if (root)
-		//			{
-		//				Q = 1;
-		//				alloc.deallocate(root, 1);
-		//			}
-		//			root = NULL;
-		//			if (_size == 2)
-		//				root = temp;
-		//			this->_size--;
-		//			return (root);
-		//		}
-		//		else
-		//		{
-		//			node_pointer temp = minValueNode(root->right);
-		//			root->data = temp->data;
-		//			root->right = DeleteNode(root->right, temp->data->first, Q);
-		//		}
-		//	}
-		//	int balance_f = Balancefactor(root);
-		//	if ((balance_f == 2) && Balancefactor(root->left) >= 0)
-		//	{
-		//		root = Rightrotation(root);
-		//		return (root);
-		//	}
-		//	else if ((balance_f == 2) && Balancefactor(root->left) == -1)
-		//	{
-		//		root->left = Leftrotation(root->left);
-		//		root = Rightrotation(root);
-		//		return (root);
-		//	}
-		//	else if ((balance_f == -2) && Balancefactor(root->right) <= 0)
-		//	{
-		//		root = Leftrotation(root);
-		//		return (root);
-		//	}
-		//	else if ((balance_f == -2) && Balancefactor(root->right) == 1)
-		//	{
-		//		root->right = Rightrotation(root->right);
-		//		root = Leftrotation(root);
-		//		return (root);
-		//	} 
-		//	return (root);
-		//}
 
 		node_pointer DeleteNode(Node *&root, Key data, size_t &Q)
 		{
@@ -336,25 +245,27 @@ class Tree {
 
 		Node * minValueNode(Node * node) {
 			Node * current = node;
-			/* loop down to find the leftmost leaf */
 			while (current -> left != NULL) {
 			current = current -> left;
 			}
 			return current;
 		}
 
-		int height(node_pointer node)
+		size_t height(node_pointer node)
 		{
+			//if (node == NULL)
+			//	return (-1);
+			//else {
+			//	int lheight = height(node->left);
+			//	int rheight = height(node->right);
+			//	if (lheight > rheight)
+			//		return (lheight + 1);
+			//	else
+			//		return (rheight + 1);
+			//}
 			if (node == NULL)
-				return (-1);
-			else {
-				int lheight = height(node->left);
-				int rheight = height(node->right);
-				if (lheight > rheight)
-					return (lheight + 1);
-				else
-					return (rheight + 1);
-			}
+				return (0);
+			return (node->height);
 		}
 
 		int Balancefactor(node_pointer node)
