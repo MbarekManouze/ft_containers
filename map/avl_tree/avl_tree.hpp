@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 16:36:24 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/05 16:40:30 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/05 21:07:20 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include "../pair/pair.hpp"
-//#include "../map_iterator/map_iterator.hpp"
 
 template <class Key, class T,  class Compare, class Alloc = std::allocator<ft::pair<const Key, T> > >
 class Tree {
@@ -26,19 +25,18 @@ class Tree {
 			typedef	T			mapped_type;
 			typedef	Compare		cmp;
 			ft::pair<const Key, T> *data;
-			Node* parent;
 			Node* left;
 			Node* right;
 			size_t height;
 
-			Node():data(nullptr), left(nullptr), right(nullptr), height(0){}
-			Node(ft::pair<const Key, T> *data) : data(data), left(nullptr), right(nullptr) ,height(0){}
+			Node():data(NULL), left(NULL), right(NULL), height(0){}
+			Node(ft::pair<const Key, T> *data) : data(data), left(NULL), right(NULL) ,height(0){}
 		};
 
 		typedef typename Alloc::template rebind<Node>::other rebind_alloc;
 		typedef typename rebind_alloc::pointer node_pointer;
 
-		Tree() : root(nullptr), _size(0) ,alloc(){}
+		Tree() : root(NULL), _size(0) ,alloc(){}
 
 		~Tree()
 		{
@@ -50,7 +48,7 @@ class Tree {
 		{
 			node_pointer rt = node;
 			if (node == NULL)
-				return (ft::pair<Node*, Node*>(nullptr, nullptr));
+				return (ft::pair<Node*, Node*>(NULL, NULL));
 			else if (node->left)
 			{
 				node = node->left;
@@ -64,7 +62,7 @@ class Tree {
 		{
 			node_pointer rt = node;
 			if (node == NULL)
-				return (ft::pair<Node*, Node*>(nullptr, nullptr));
+				return (ft::pair<Node*, Node*>(NULL, NULL));
 			if (node->right)
 			{
 				node = node->right;
@@ -154,7 +152,7 @@ class Tree {
 			Compare cmp;
 			if (root == NULL)
 				return (NULL);
-			node_pointer tmp = nullptr;
+			node_pointer tmp = NULL;
 			if (root->left != NULL && root->left->data->first == key)
 				return (root);
 			if (root->right != NULL && root->right->data->first == key)
@@ -253,16 +251,6 @@ class Tree {
 
 		size_t height(node_pointer node)
 		{
-			//if (node == NULL)
-			//	return (-1);
-			//else {
-			//	int lheight = height(node->left);
-			//	int rheight = height(node->right);
-			//	if (lheight > rheight)
-			//		return (lheight + 1);
-			//	else
-			//		return (rheight + 1);
-			//}
 			if (node == NULL)
 				return (0);
 			return (node->height);
@@ -298,6 +286,8 @@ class Tree {
 			return (y);
 		}
 
+		//--------------------PRINT TREE-------------------//
+
 		struct Trunk
 		{
 			Trunk *prev;
@@ -310,10 +300,9 @@ class Tree {
 			}
 		};
 		
-		// Helper function to print branches of the binary Node
 		void showTrunks(Trunk *p)
 		{
-			if (p == nullptr) {
+			if (p == NULL) {
 				return;
 			}
 
@@ -323,15 +312,13 @@ class Tree {
 
 		void printTree(node_pointer root, Trunk *prev, bool isLeft)
 		{
-			if (root == nullptr) {
-				//std::cerr << "hnaa\n";
+			if (root == NULL) {
 				return;
 			}
 
 			std::string prev_str = "    ";
 			Trunk *trunk = new Trunk(prev, prev_str);
 
-			//if (root->right != NULL)
 				printTree(root->right, trunk, true);
 
 			if (!prev) {

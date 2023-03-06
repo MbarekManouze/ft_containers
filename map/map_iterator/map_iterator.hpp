@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 14:53:31 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/05 13:33:23 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/06 00:32:29 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ class Map_Iterator {
 
 		Map_Iterator& operator++()
 		{
-			if(tree_branche->right != nullptr){
+			if(tree_branche->right != NULL){
 				tree_branche = tree_branche->right;
 				while(tree_branche->left){
 					tree_branche = tree_branche->left;
 				}
 			}else{
 				Node *parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, tree_branche->data->first);
-				if (parent == nullptr)
+				if (parent == NULL)
 				{
 					tree_branche = root; 
 				}
@@ -83,7 +83,7 @@ class Map_Iterator {
 					tree_branche = parent;
 					parent = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::I_wanna_know_my_parent(root, parent->data->first);
 				}
-				tree_branche =parent;
+				tree_branche = parent;
 			}
 			return *this;
 		}
@@ -97,7 +97,7 @@ class Map_Iterator {
 
 		Map_Iterator& operator--()
 		{
-			if (tree_branche == nullptr)
+			if (tree_branche == NULL)
 			{
 				tree_branche = Tree<typename Node::key_type, typename Node::mapped_type, typename Node::cmp>::large_root_pair(root).second;
 				return (*this);

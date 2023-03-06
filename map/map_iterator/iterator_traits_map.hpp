@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 12:13:51 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/05 13:33:20 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:53:30 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 namespace ft
 {
-
   template<class Iterator>
   class iterator_traits_map{
     public:
@@ -50,7 +49,6 @@ namespace ft
           typedef const T&                        reference;
           typedef std::bidirectional_iterator_tag iterator_category;
   };
-
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 13:32:52 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/05 17:48:54 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/06 00:10:02 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		}
 
 		~vector(){ 
-			
 			if (_data != NULL)
 			{
 				for (size_t i = 0; i < _size; i++)
@@ -68,7 +67,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		}
 
 		template <class InputIterator>
-		vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = nullptr)
+		vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 		:_data(0),allocater(alloc),_size(0),_capacity(0)
 		{
 			assign(first, last);
@@ -127,8 +126,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 			}
 			_size=0;
 		}
-
-
 
 
 		////////////////////////////////////////////
@@ -265,9 +262,6 @@ template < class T, class Alloc = std::allocator<T> > class vector
 				allocater.destroy(_data + _size - 1);
 				_size--;
 			}
-			else {
-				exit(1);
-			}
 		}
 
 
@@ -359,7 +353,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		}
 
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
+		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = NULL)
 		{
 			size_type cords = (position) - _data;
 			vector vec_tmp;
@@ -381,7 +375,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		}
 
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
+		void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = NULL)
 		{
 			size_type cords = (position) - _data;
 			size_t n = last - first;
@@ -481,7 +475,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
 		}
 
 		template <class InputIterator>
-  		void assign (InputIterator first, InputIterator last,typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr)
+  		void assign (InputIterator first, InputIterator last,typename ft::enable_if<!ft::is_integral<InputIterator>::value && !std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = NULL)
 		{
 			clear();
         	vector tmp;
@@ -501,7 +495,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
         	_size = difference;
 		}
 		template <class InputIterator>
-  			void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = nullptr){
+  			void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && std::__is_random_access_iterator<InputIterator>::value , InputIterator>::type* = NULL){
 			clear();
         	size_t difference = last - first;
         	pointer new_data = allocater.allocate(difference);
@@ -516,6 +510,7 @@ template < class T, class Alloc = std::allocator<T> > class vector
         	_capacity = difference;
         	_size = difference;
 		}
+
 	private :
 		pointer 		_data;
 		allocator_type	allocater;
@@ -534,12 +529,12 @@ template <class InputIterator1, class InputIterator2>
     {
         while (first1!=last1)
         {
-          if (first2 == last2 || *first2 < *first1)
-		  	return false;
-          else if (*first1 < *first2)
-		  	return true;
-          ++first1;
-		  ++first2;
+			if (first2 == last2 || *first2 < *first1)
+				return false;
+			else if (*first1 < *first2)
+				return true;
+			++first1;
+			++first2;
         }
         return (first2 != last2);
     }
@@ -547,11 +542,12 @@ template <class InputIterator1, class InputIterator2>
 template <class InputIterator1, class InputIterator2>
     bool equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
     {
-        while (first1!=last1) {
-        if (!(*first1 == *first2)) 
-          return false;
-        ++first1; ++first2;
-  	}
+        while (first1 != last1) {
+			if (!(*first1 == *first2)) 
+				return false;
+			++first1;
+			++first2;
+  		}
         return true;
     }
 
@@ -559,63 +555,51 @@ template <class InputIterator1, class InputIterator2, class BinaryPredicate>
     bool equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate pred)
     {
         while (first1!=last1) {
-        if (!pred(*first1,*first2))
-          return false;
-        ++first1; ++first2;
-  }
+			if (!pred(*first1,*first2))
+				return false;
+			++first1;
+			++first2;
+  		}
         return true;
     }
 
 template <class T, class A>  
-    bool operator== (const vector<T,A>& lhs, const vector<T,A>& rhs)
+    bool operator==(const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
-        if (lhs.capacity() != rhs.capacity())
+        if (lhs.size() != rhs.size())
             return(false);
         return(ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
     }
 
 template <class T, class A>
-    bool operator!= (const vector<T,A>& lhs, const vector<T,A>& rhs)
+    bool operator!=(const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
         if (lhs.size() != rhs.size())
-            return(1);
-        if((lhs.capacity() != rhs.capacity()))
-            return(1);
+            return(true);
         return(!(ft::equal(lhs.begin(), lhs.end(), rhs.begin())));
 	}
 
 template <class T, class A>
-    bool operator>  (const vector<T,A>& lhs, const vector<T,A>& rhs)
+    bool operator>(const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
 		return rhs < lhs;
     }
 
 template <class T, class A>  
-    bool operator>= (const vector<T,A>& lhs, const vector<T,A>& rhs)
+    bool operator>=(const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
         return (rhs <= lhs);
     }
 
 template <class T, class A>  
-    bool operator< (const vector<T,A>& lhs, const vector<T,A>& rhs)
+    bool operator<(const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
-        if (lhs.capacity() < rhs.capacity())
-            return(true);
-        else if (lhs.capacity() > rhs.capacity())
-            return(false);
-        else
-            return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
 
 template <class T, class A>  
-    bool operator<= (const vector<T,A>& lhs, const vector<T,A>& rhs)
+    bool operator<=(const vector<T,A>& lhs, const vector<T,A>& rhs)
     {
-
-        if (lhs.capacity() < rhs.capacity())
-            return(true);
-        else if (lhs.capacity() > rhs.capacity())
-            return(false);
-        else
          return((ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) || (lhs == rhs));
     }
 }

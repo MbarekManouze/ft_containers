@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 09:23:41 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/05 13:33:51 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/05 22:58:17 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ template <class T> class Iterator
 
         //--------------member types-----------------------//
 
-        typedef typename  ft::iterator_traits<T*>::value_type         value_type;
-        typedef typename ft::iterator_traits<T*>::reference reference;
-        typedef typename ft::iterator_traits<T*>::pointer pointer;
-        typedef typename ft::iterator_traits<T*>::difference_type difference_type;
-        typedef typename ft::iterator_traits<T*>::iterator_category iterator_category;
+        typedef typename  ft::iterator_traits<T*>::value_type               value_type;
+        typedef typename ft::iterator_traits<T*>::reference                 reference;
+        typedef typename ft::iterator_traits<T*>::pointer                   pointer;
+        typedef typename ft::iterator_traits<T*>::difference_type           difference_type;
+        typedef typename ft::iterator_traits<T*>::iterator_category         iterator_category;
 
 
         //-------------------constructors-------------------//
@@ -71,7 +71,6 @@ template <class T> class Iterator
         //-----------------relational operators------------------//
 
 
-        friend Iterator<T>          operator+ (typename Iterator<T>::difference_type n, const Iterator<T>& it) { return it + n; }
         template <class P, class P2>
             friend bool operator< (const Iterator<P>& lhs, const Iterator<P2>& rhs);
         template <class P, class P2>
@@ -87,6 +86,11 @@ template <class T> class Iterator
 	protected :
 		T *_iterator_data;
 };
+template<class T_>
+    Iterator<T_>   operator+ (typename Iterator<T_>::difference_type n, const Iterator<T_>& it) 
+    { 
+        return it + n;
+    }
 
 template <class P, class P2> 
     bool operator== (const Iterator<P>& lhs, const Iterator<P2>& rhs)

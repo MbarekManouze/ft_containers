@@ -6,7 +6,7 @@
 /*   By: mmanouze <mmanouze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 15:23:29 by mmanouze          #+#    #+#             */
-/*   Updated: 2023/03/05 17:40:21 by mmanouze         ###   ########.fr       */
+/*   Updated: 2023/03/05 22:41:49 by mmanouze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ namespace ft
                         Reverse_Iterator&               operator-=(difference_type n) { reverse_iterator_data = reverse_iterator_data + n; return (*this);}
                         Reverse_Iterator&               operator++() {--(reverse_iterator_data); return (*this);}
                         Reverse_Iterator&               operator--() { ++(reverse_iterator_data); return (*this);}
-                        friend Reverse_Iterator<T>      operator+(typename Reverse_Iterator<T>::difference_type n, const Reverse_Iterator<T>& object) 
-                        {
-                                return (object + n);
-                        }
 
 
                         //---------------------relational operators------------------------//
@@ -94,7 +90,11 @@ namespace ft
                         template <class P, class P2>
                                 friend bool operator>= (const Reverse_Iterator<P>& obj, const Reverse_Iterator<P2>& obj2);
         };
-
+        template <typename _T_>
+                Reverse_Iterator<_T_>      operator+(typename Reverse_Iterator<_T_>::difference_type n, const Reverse_Iterator<_T_>& object) 
+                {
+                        return (object + n);
+                }
         template <typename P, typename P2>
                 bool operator< (const Reverse_Iterator<P>& obj, const Reverse_Iterator<P2>& obj2){ return (obj.reverse_iterator_data > obj2.reverse_iterator_data);}
         template <class P, class P2>
